@@ -1,0 +1,103 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+    {% block content %}
+    
+    <!-- <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+
+
+
+                <div class="content-section">
+                    <div class="media">
+                        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" />
+                        <div class="media-body">
+                            <h2 class="account-heading">{{ user.username }}</h2>
+                            <p class="text-secondary">{{ user.email }}</p>
+                        </div>
+                    </div>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">
+                                Profile Info
+                            </legend>
+                            {{ u_form|crispy }}
+                            {{ p_form|crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-info" type="submit">Update</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div> -->
+    
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        
+                <!-- end page title -->
+
+
+                        <!-- <div class="card shadow-sm  p-0"> 
+                            <div class="cover-image rounded-top" data-image-src="{{ user.profile.coverimage.url }}"></div>
+                            <div class="card-body pb-5">
+                                <div class="text-center d-flex align-items-center justify-content-between">
+                                        <img src="{{ user.profile.image.url }}" class="img-fluid user-avatar large-avatar rounded-circle mt-n7 mb-4" alt="{{teacher.username}}">
+                                        
+                                        <a href="" class="btn btn-dark rounded-top mt-n6">Edit Profile</a>
+                                </div>
+                                <div>
+                                    <h4 class="h3">{{ user.username }}</h4>
+                                    <h5 class="fw-normal mb-4">{{ user.email }}</h5>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="card shadow-sm p-0">
+                            <div class="card-body pb-5">
+                                
+                                
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <fieldset class="form-group">
+                                        <legend class="border-bottom mb-4">
+                                            Profile Info
+                                        </legend>
+                                        {{ u_form|crispy }}
+                                        {{ p_form|crispy }}
+                                    </fieldset>
+                                    <div class="form-group">
+                                        <button class="btn btn-outline-info" type="submit">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                          </div>
+        
+        
+                   </div> <!-- end col -->
+                   
+                </div>
+                <!-- end row-->
+
+                
+                <!-- end row-->
+
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+
+    </div>
+    {% endblock content %}
