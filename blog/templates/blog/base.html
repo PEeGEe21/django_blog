@@ -12,15 +12,200 @@
         {% endif %}
 
         <!-- CSS only -->
+        <link rel="stylesheet" href="" type="text/css">
+        <link rel="stylesheet" href="{% static 'blog/plugins/dropify/dropify.min.css' %}" type="text/css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" integrity="sha512-In/+MILhf6UMDJU4ZhDL0R0fEpsp4D3Le23m6+ujDWXwl3whwpucJG1PEmI3B07nyJx+875ccs+yX2CqQJUxUw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+
             <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
             <link rel="stylesheet" type="text/css" href="{% static 'blog/fontawesome5/css/all.css' %}">
             <link rel="stylesheet" type="text/css" href="{% static 'blog/line-awesome/css/line-awesome.css' %}">
 
+        <link rel="stylesheet" href="{% static 'blog/plugins/select2/select2.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'blog/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'blog/plugins/icons.min.css' %}" type="text/css">
+
         <link rel="stylesheet" href="{% static 'blog/plugins/bootstrap.min.css' %}" type="text/css">
+
         <link rel="stylesheet" href="{% static 'blog/plugins/theme.min.css' %}" type="text/css">
+
 
         <!-- <link rel="stylesheet" href="{% static 'blog/vendor/bootstrap.min.css' %}" type="text/css"> -->
         <style>
+
+.notify-widget.kt-portlet .kt-portlet__head .kt-portlet__head-toolbar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-line-pack: end;
+    align-content: flex-end;
+}
+
+.notify-widget.kt-widget4 .kt-widget4__item .kt-widget4__info .kt-widget4__displayname {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #6c7293;
+    -webkit-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.notify-widget.kt-portlet .kt-portlet__head {
+    -webkit-transition: left 0.3s, right 0.3s, height 0.3s;
+    transition: left 0.3s, right 0.3s, height 0.3s;
+}
+.notify-widget.kt-portlet .kt-portlet__head {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 25px;
+    border-bottom: 1px solid #ebedf2;
+    min-height: 60px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.notify-widget.kt-portlet .kt-portlet__head .kt-portlet__head-label {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-line-pack: flex-first;
+    align-content: flex-first;
+}
+
+.notify-widget.kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #464457;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item:first-child {
+    padding-top: 0;
+}
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed #ebedf2;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item .kt-widget4__pic {
+    padding-right: 1rem;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item .kt-widget4__info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding-right: 1.25rem;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item .kt-widget4__info .kt-widget4__displayname {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #6c7293;
+    -webkit-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item .kt-widget4__info .kt-widget4__text {
+    font-size: 1rem;
+    margin: 0;
+    color: #a7abc3;
+}
+
+.notify-widget.kt-portlet .kt-widget4 .kt-widget4__item .kt-widget4__pic img {
+    width: 2.5rem;
+    border-radius: 4px;
+}
+
+@media (min-width: 1025px){
+    .notify-widget.kt-portlet.kt-portlet--height-fluid .kt-portlet__body {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+}
+
+.notify-widget.kt-portlet .kt-portlet__body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding: 25px;
+    border-radius: 4px;
+}
+
+
+@media (min-width: 1025px){
+    .notify-widget.kt-portlet.kt-portlet--height-fluid {
+    height: calc(100% - 20px);
+}
+}
+.notify-widget.kt-portlet {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-shadow: 0px 0px 13px 0px rgb(82 63 105 / 5%);
+    box-shadow: 0px 0px 13px 0px rgb(82 63 105 / 5%);
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+
+
+.dropify-message .file-icon p{
+    font-size: 14px;
+    color: #777
+}
+
+
+.dropdown .fas.fa-ellipsis-v,
+.kt-portlet__head-toolbar .fas.fa-ellipsis-v,
+.kt-portlet__head-toolbar .fas.fa-ellipsis-h{
+    font-size: 14px;
+    color: #777;
+}
+
 
 .post-detail .h6{
     color: #6d61ea;
@@ -161,6 +346,23 @@
             .cover-image{
                 width: 100%;
                 height: 300px;
+            }
+
+            /* .media {
+                display: block;
+                display: -ms-flexbox;
+                display: block;
+                -webkit-box-align: start;
+                -ms-flex-align: start;
+                align-items: flex-start;
+            } */
+        }
+        @media only screen and (max-width: 568px) {
+            
+            .article-img {
+                height: 40px;
+                width: 40px;
+                margin-right: 10px;
             }
         }
 
@@ -305,6 +507,8 @@
 
 
 
+
+
             .icons{
                 color: rgb(197, 193, 193);
             }
@@ -320,6 +524,24 @@
                 overflow: hidden;
             }
 
+            @media (max-width: 992px){
+                .main-content {
+                    margin-left: 0px;
+                    margin-right: 0px;
+                }
+
+                .add_new{
+                    right: 30px
+                }
+
+                body.enable-vertical-menu .vertical-menu.right-menu{
+                    display:none;
+                }
+            }
+
+            .action-btns i{
+                font-size: 1.2rem;            
+            }
             @media only screen and (max-width: 768px) {
       
                 .main-content{
@@ -330,6 +552,9 @@
                 .add_new {
                     right: 20px;
                     
+                    }
+                    .action-btns i{
+                        font-size: 14px;            
                     }
                 /* .action-btns i:nth-child(2){
                     margin-right:50px;
@@ -342,8 +567,10 @@
             }
 
             .vertical-menu{
-                width:300px
+                width:300px;
+                transition: all .4s;
             }
+
             .vertical-menu.right-menu{
                 float:right;
                 right: 0;
@@ -356,9 +583,7 @@
                 margin-top: 20px;
                 margin-bottom: 10px;
             }
-            .action-btns i{
-                font-size: 1.2rem;            
-            }
+            
 
             /* .action-btns i:nth-child(2){
                 margin-right:70px;
@@ -369,6 +594,12 @@
                 margin-left:70px;
             } */
 
+
+.modal-body .btn:focus, .btn.focus {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
 
             .theme-switch {
@@ -437,7 +668,7 @@ body {
 }
 .theme-dark #sidebar-menu ul li a{
   /* background-color: #070a0d; */
-  color: #b1aeaeb9;
+  color: #eeece8;
 }
 /* .theme-dark .media-body .article-content,
 .theme-dark .media-body .article-metadata{
@@ -453,9 +684,19 @@ body {
 }
 .theme-dark .content-section {
     background: #070a0d;
-    border: 1px solid #eeece886;
+    border: 1px solid #eeece84d;
+    /* border: 1px solid #eeece862; */
 
 }
+
+.article-title {
+    color: #495057;
+}
+
+.article-content{
+    color: #747a80;
+}
+
 .theme-dark .article-title,
 .theme-dark .article-content,
 .theme-dark .media-body .article-metadata {
@@ -495,6 +736,20 @@ body {
     color: #eeece8;
 }
 
+.theme-dark .edit-card{
+    background: #070a0d;
+}
+
+.theme-dark .nav-tabs>li>a, 
+.theme-dark .nav-pills>li>a {
+    color: #eeece8;
+    font-weight: 500;
+}
+
+.theme-dark .card-signin .card-text{
+    color: #000
+}
+
 
 /* .card-search .user-avatar.large-avatar { */
     
@@ -525,24 +780,21 @@ body {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container-fluid">
               <a class="navbar-brand" href="/">
-                  <img src="{% static 'blog/logo.jpg' %}" width="40px"/>
+                  <img src="{% static 'blog/logo3.png' %}" width="40px"/>
               </a>
 
-              <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect"
-                  id="vertical-menu-btn">
-                  <i class=" fas fa-1x fa-ellipsis-v"></i>
-                </button>
-              <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect"
-                  id="vertical-menu-btn-right">
-                  <i class=" fas fa-1x fa-ellipsis-v"></i>
-                </button>
+              
 
               <!-- <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect"
                   id="vertical-menu-btn-right">
                   <i class=" fas fa-1x fa-ellipsis-v"></i>
                   right
                 </button> -->
-
+                <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect ml-auto"
+                id="vertical-menu-btn">
+                <i class=" fas fa-1x fa-ellipsis-v"></i>
+              </button>
+              
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -588,9 +840,6 @@ body {
                                     <a class="dropdown-item d-flex align-items-center justify-content-between"
                                         href="{% url 'profile' %}">
                                         <span>Profile</span>
-                                        <span>
-                                            <span class="badge badge-pill badge-soft-danger">1</span>
-                                        </span>
                                     </a>
                                     <a class="dropdown-item d-flex align-items-center justify-content-between"
                                             href="{% url 'logout' %}">
@@ -631,27 +880,31 @@ body {
                         <div id="sidebar-menu">
                             <ul class="metismenu list-unstyled" id="side-menu">
                                 <li class="menu-title">Menu</li>
-
+                                <li><a href="{% url 'blog-home' %}" class="waves-effect d-flex align-items-center"><i class="la la-home"></i><span>Home</span></a></li>        
                                 
                                 <li>
-                                    <a href="{% url 'profile' %}"  class="waves-effect"><i class="fa fa-user"></i><span>Profile</span></a>
+                                    <a href="{% url 'profile' %}"  class="waves-effect d-flex align-items-center"><i class="la la-user"></i><span>Profile</span></a>
                                 </li>
 
 
-                                <li><a href="#" class="waves-effect"><i class="bx bx-layout"></i><span>List</span></a></li>
-                                <li><a href="#" class="waves-effect"><i class="bx bx-layout"></i><span>Topics</span></a></li>
-                                <li><a href="#" class="waves-effect"><i class="bx bxs-book-content"></i><span>Bookmarks</span></a></li>
-                                <li><a href="#" class="waves-effect"><i class="bx bxs-book-content"></i><span>Moments</span></a></li>
-                                <li><a href="#" class="waves-effect"><i class="bx bxs-book-content"></i><span>Monetization</span></a></li>
-
+                                <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-comment"></i><span>List</span></a></li>
+                                <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-pencil-square"></i><span>Topics</span></a></li>
+                                <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-bookmark"></i><span>Bookmarks</span></a></li>
+                                <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-flash"></i><span>Moments</span></a></li>
+                                <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-star-o"></i><span>Monetization</span></a></li>
+                                <!-- <div class="d-lg-none d-block"> -->
+                                    <li class="d-lg-none d-block"><a href="{% url 'search_users' %}" class="waves-effect d-flex align-items-center"><i class="la la-search"></i><span>Search</span></a></li>
+                                    <li class="d-lg-none d-block"><a href="{% url 'profile' %}" class="waves-effect"><i class="far fa-bell"></i><span class="badge badge-pill badge-primary float-right">3</span><span>Notifications</span></a></li>
+        
+                                <!-- </div> -->
 
                                 <li class="menu-title">More</li>
 
                                 
-                                <li><a href="#" class=" waves-effect"><i class="bx bx-calendar"></i><span>Settings and Privacy</span></a></li>
+                                <li><a href="#" class=" waves-effect"><span>Settings and Privacy</span></a></li>
 
                                 <li>
-                                    <a href="#" class="waves-effect"><i class="bx bx-log-out-circle"></i><span>Help Center</span></a>
+                                    <a href="#" class="waves-effect"><span>Help Center</span></a>
                                     
                                 </li>
                                 {% if user.is_authenticated %}
@@ -693,17 +946,18 @@ body {
                                         <li class="menu-title">Menu Right</li>
         
         
-                                        <li><a href="{% url 'search_users' %}" class="waves-effect"><i class="bx bx-layout"></i><span>Search</span></a></li>
-                                        <li><a href="#" class="waves-effect"><i class="bx bxs-book-content"></i><span>Result Report</span></a></li>
+                                        <li><a href="{% url 'users_list' %}" class="waves-effect d-flex align-items-center"><i class="la la-users"></i><span>All Users</span></a></li>
+                                        <li><a href="{% url 'search_users' %}" class="waves-effect d-flex align-items-center"><i class="la la-search"></i><span>Search</span></a></li>
+                                        <li><a href="{% url 'profile' %}" class="waves-effect"><i class="far fa-bell"></i><span class="badge badge-pill badge-primary float-right">{{ rec_follow_requests.count }}</span><span>Notifications</span></a></li>
         
         
                                         <li class="menu-title">More</li>
         
                                         
-                                        <li><a href="#" class=" waves-effect"><i class="bx bx-calendar"></i><span>Settings</span></a></li>
+                                        <li><a href="{% url 'follower_list' %}" class=" waves-effect"><i class="la la-hand-peace-o"></i><span>Followers</span></a></li>
         
                                         <li>
-                                            <a href="#" class="waves-effect"><i class="bx bx-log-out-circle"></i><span>Logout</span></a>
+                                            <a href="#" class="waves-effect"><i class="la la-sign-out"></i><span>Logout</span></a>
                                             
                                         </li>
         
@@ -733,14 +987,17 @@ body {
         <script src="{% static 'blog/js/popper.min.js' %}"></script>
 
         <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'blog/plugins/dropify/dropify.min.js' %}"></script>
         
-
+        <script src="{% static 'blog/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'blog/plugins/select2/select2.min.js' %}"></script>
         <script src="{% static 'blog/js/metismenu.min.js' %}"></script>
         <script src="{% static 'blog/js/waves.js' %}"></script>
 
         
         
         <script src="{% static 'blog/js/simplebar.min.js' %}"></script>
+        <!-- <script src="{% static 'blog/js/advanced-plugins.js' %}"></script> -->
         <script src="{% static 'blog/js/theme-switch.js' %}"></script>
 
         <script>
@@ -766,23 +1023,88 @@ body {
 
 
 
-            $('.likin').click(function(){
-                $.ajax({
-                    type: "POST",
-                    url: {'post_id': $(this).attr('name'), 'operation': 'like_submit','csrfmiddlewaretoken':'{{csrf_token}}'},
-                    dataType: "json",
-                    success: function(response){
-                        selector = document.getElementsByName(response.post_id);
-                            if(response.liked==true){
-                                $(selector).css("color", "blue");
-                            }
-                            else if(response.liked==false){
-                                $(selector).css("color", "rgb(197, 193, 193)");
-                            }
+            // $('.likin').click(function(){
+            //     $.ajax({
+            //         type: "POST",
+            //         url: {'post_id': $(this).attr('name'), 'operation': 'like_submit','csrfmiddlewaretoken':'{{csrf_token}}'},
+            //         dataType: "json",
+            //         success: function(response){
+            //             selector = document.getElementsByName(response.post_id);
+            //                 if(response.liked==true){
+            //                     $(selector).css("color", "blue");
+            //                 }
+            //                 else if(response.liked==false){
+            //                     $(selector).css("color", "rgb(197, 193, 193)");
+            //                 }
 
+            //         }
+            //     })
+            // })
+
+            
+        $(".like").click(function(e) {
+            var id = this.id;
+            var href = $(".like").find("a").attr("href");
+            e.preventDefault();
+
+            $.ajax({
+                url: href,
+                data: {
+                    likeId: id,
+                },
+                success: function(response){
+                    if(response.liked){
+                        $("#likebtn" + id).css("color", "red")
+                    }else {
+                        $("#likebtn" + id).css("color", "rgb(197, 193, 193)")
+                    }
+                }
+            });
+
+        })
+
+        $( document ).ready(function() {
+
+            $('.like-form').submit(function(e){
+                e.preventDefault()
+                
+                const post_id = $(this).attr('id')
+                
+                const likeText = $(`.like-btn${post_id}`)
+                const trim = $.trim(likeText)
+
+                const url = $(this).attr('action')
+                
+                let res;
+                const likes = $(`.like-count${post_id}`).text()
+                const trimCount = parseInt(likes)
+                
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        'post_id':post_id,
+                    },
+                    success: function(response) {
+                        if(trim === 'Unlike') {
+                            $(`.like-btn${post_id}`).css("color", "red")
+                            res = trimCount - 1
+                        } else {
+                            $(`.like-btn${post_id}`).css("color", "rgb(197, 193, 193)")
+                            res = trimCount + 1
+                        }
+
+                        $(`.like-count${post_id}`).text(res)
+                    },
+                    error: function(response) {
+                        console.log('error', response)
                     }
                 })
+
             })
+        });
+    
 
             // $(".like").click(function (e){
             //     var id = this.id;
@@ -810,6 +1132,7 @@ body {
             </script>
 
         <!-- <script src="{% static 'blog/js/main.js' %}"></script> -->
+        <script src="{% static 'blog/js/fileuploads.js' %}"></script>
         <script src="{% static 'blog/js/theme.js' %}"></script>
 
     </body>

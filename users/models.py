@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from PIL import Image
 from autoslug import AutoSlugField
 from django.urls import reverse
+from django.conf import settings
 
 
 
@@ -13,9 +14,10 @@ class Profile(models.Model):
     displayname = models.CharField('Name', default='', max_length=25)
     slug = AutoSlugField(populate_from='user', null=True)
     bio = models.TextField(default='')
-    birthday = models.DateTimeField('Birthday', blank=True, null=True)
+    birthday = models.DateField('Birthday', blank=True, null=True)
     image = models.ImageField(default='default.png', upload_to='profile_pics')
     coverimage = models.ImageField(default='default.png', upload_to='cover_pics')
+    followers = models.ManyToManyField("Profile", blank=True)
 
 
     def __str__(self):
@@ -34,3 +36,12 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class FollowRequest(models.Model):
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='to_user', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='from_user', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "From {}, to {}".format(self.from_user.username, self.to_user.username)

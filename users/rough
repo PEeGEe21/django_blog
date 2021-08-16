@@ -1,0 +1,127 @@
+<div class="card card-signin my-5">
+                                        <div class="card-body">
+                                            <h2>
+                                                Follow Request received ({{ rec_follow_requests.count }})
+                                            </h2>
+                                            <hr class="my-2">
+                                            {% if not rec_follow_requests %}
+                                                <h5>no received requests</h5>
+                                            {% else %}
+
+                                                {% for r_request in rec_follow_requests %}
+                                                    <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                                                        <img src="{{ r_request.from_user.profile.image.url }}" class="rounded mr-2" width="40" height="40" alt="">
+                                                    </a>
+                                                    <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                                                        <b>{{ r_request.from_user.username }}</b>
+                                                    </a>
+
+                                                    <small class="float-right">
+                                                        <a class="btn btn-success mr-2" href="/users/follow-request/accept/{{ r_request.from_user.id }}">Accept</a>
+                                                        <a class="btn btn-danger mr-2" href="/users/follow-request/delete/{{ r_request.from_user.id }}">Reject</a>
+
+                                                    </small>
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+
+
+                    <div class="card card-signin my-5">
+                                        <div class="card-body">
+                                            <h2>
+                                                Follow Request Received ({{ rec_follow_requests.count }})
+                                            </h2>
+                                            <hr class="my-2">
+                                            {% if not rec_follow_requests %}
+                                                <h5>no received requests</h5>
+                                            {% else %}
+
+                                                {% for r_request in rec_follow_requests %}
+                                                    <a href="{{ r_request.from_user.get_absolute_url }}">
+                                                        <img src="{{ r_request.from_user.profile.image.url }}" class="rounded mr-2" width="40" height="40" alt="">
+                                                    </a>
+                                                    <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                                                        <b>{{ r_request.from_user.username }}</b>
+                                                    </a>
+
+                                                    <small class="float-right">
+                                                        <a class="btn btn-success mr-2" href="/users/follow-request/accept/{{ r_request.from_user.id }}">Accept</a>
+                                                        <a class="btn btn-danger mr-2" href="/users/follow-request/delete/{{ r_request.from_user.id }}">Reject</a>
+
+                                                    </small>
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card card-signin my-5">
+                                        <div class="card-body">
+                                            <h2>
+                                                Follow Request Sent ({{ sent_follow_requests.count }})
+                                            </h2>
+                                            <hr class="my-2">
+                                            {% if not sent_friend_requests %}
+
+                                                <h5>no sent requests</h5>
+
+                                            {% else %}
+
+                                                {% for s_request in sent_follow_requests %}
+                                                
+                                                    <a href="{{ s_request.to_user.profile.get_absolute_url }}">
+                                                        <img src="{{ s_request.to_user.profile.image.url }}" class="rounded mr-2" width="40" height="40" alt="">
+                                                    </a>
+                                                    <a href="{{ s_request.to_user.profile.get_absolute_url }}">
+                                                        <b>{{ s_request.to_user.username }}</b>
+                                                    </a>
+
+                                                    <small class="float-right">
+                                                        <a class="btn btn-warning mr-2" href="{% url 'cancel_follow_request' s_request.to_user.id %}">Cancel</a>
+                                                    </small>
+
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+
+                                                                         <!-- <form action="{% url 'like-post' %}" method="POST" class="like-form" id="{{post.id}}"  -->
+
+
+<!-- <button class="btn d-flex align-items-center like" id="{{ post.id }}">
+                                            {% if request.user in likes %}
+                                                <a href="" class="" id="likebtn{{ post.id }}">
+                                                    <i class="fas fa-heart icons mr-2" style="color:red" ></i>
+                                                </a> {{post.num_likes}}
+                                            {% else %}
+                                                <a href="" id="likebtn{{ post.id }}" >
+                                                    <i class="far fa-heart icons mr-2" style="color:rgb(197, 193, 193)" ></i>
+                                                </a> {{post.num_likes}}
+                                            {% endif %}
+                                        </button> -->
+
+
+
+                                        <!-- {% extends "blog/base.html" %}
+    {% block content %}
+    
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <h2>You have been logged out</h2>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        <a href="{% url 'login' %}">Log in Again</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %} -->

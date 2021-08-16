@@ -4,14 +4,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.views.generic import ListView, CreateView
-from .models import Profile
+from .models import Profile, FollowRequest
 from django.contrib.auth.models import User
-from blog.models import Post
+from blog.models import Comment, Post
 from django.urls import reverse
 from django.db.models import Q, query
 from django.http import HttpResponse, response
 import json
 from autoslug import AutoSlugField
+from django.http import HttpResponseRedirect
+import random
 
 
 
@@ -58,39 +60,29 @@ def profileEdit(request):
 @login_required
 def profile(request):
     # post = get_object_or_404(Post, pk=pk)
-    user = request.user
-    print(user.id)
-    user_posts = Post.objects.filter(author=user)
-    if request.method == 'POST':
-        user = request.user
-        user_posts = Post.objects.filter(author=user)
-        if request.POST.get("operation") == "like_submit" and request.is_ajax():
-            post_id = request.POST.get("post_id", None)
-            post= get_object_or_404(Post, pk=post_id)
-            if post.likes.filter(id=request.user.id):
-                post.likes.remove(request.user)
-                liked= False
-                print(liked, "liked")
-            else:
-                post.likes.add(request.user)
-                liked=True
-            ctx={"likes_count":post.total_likes, "liked":liked, "post_id":post_id, 'user_posts': user_posts,}
-            return HttpResponse(json.dumps(ctx), content_type='application/json')
-    else:
-        posts=Post.objects.all()
-        already_liked=[]
-        id=request.user.id
-        for post in posts:
-            if(post.likes.filter(id=id).exists()):
-                already_liked.append(post.id)
-                
-        ctx={"posts":posts, "already_liked": already_liked,  'user_posts': user_posts}
-        print(already_liked)
-        print(user_posts)
-        # context = {
-        #     'user_posts': user_posts,
-        # }
-        return render(request, 'users/profile.html', ctx)
+    p = request.user.profile
+    user = p.user
+    sent_follow_requests = FollowRequest.objects.filter(from_user=p.user)
+    rec_follow_requests = FollowRequest.objects.filter(to_user=p.user)
+    followers = p.followers.all()
+    user_posts = Post.objects.filter(author=user).order_by('-date_posted')
+    user_comments = Comment.objects.filter(author=user)
+    post_count = Post.objects.filter(author=user).order_by('-date_posted').count()
+
+    print(rec_follow_requests, "rec_follow_requests")
+
+    posts=Post.objects.all()       
+    ctx={
+        "posts":posts, 
+        'user_posts': user_posts, 
+        'user_comments': user_comments, 
+        'followers_list': followers,
+        'sent_follow_requests': sent_follow_requests,
+        'rec_follow_requests': rec_follow_requests,
+        'post_count': post_count
+        }
+    
+    return render(request, 'users/profile.html', ctx)
 
 
 @login_required
@@ -120,26 +112,184 @@ def like(request):
 @login_required
 def profile_view(request, slug):
     p = Profile.objects.filter(slug=slug).first()
-    print(p, "p")
+    # print(p, "p")
     u = p.user
-    user_posts = Post.objects.filter(author=u)
+    sent_follow_requests = FollowRequest.objects.filter(from_user=p.user)
+    rec_follow_requests = FollowRequest.objects.filter(to_user=p.user)
+    user_posts = Post.objects.filter(author=u).order_by('-date_posted')
+    post_count = Post.objects.filter(author=u).order_by('-date_posted').count()
+    print(rec_follow_requests)
+
+    followers = p.followers.all()
+
+    button_status = 'none'
+    if p not in request.user.profile.followers.all():
+        button_status = 'not_follower'
+
+        if len(FollowRequest.objects.filter(from_user=request.user).filter(to_user=p.user)) == 1:
+            button_status = 'follower_request_sent'
+
+        
+        if len(FollowRequest.objects.filter(from_user=p.user).filter(to_user=request.user)) == 1:
+            button_status = 'follower_request_received'
 
     context = {
         'u': u,
-        'user_posts': user_posts
+        'button_status': button_status,
+        'followers_list': followers,
+        'sent_follow_requests': sent_follow_requests,
+        'rec_follow_requests': rec_follow_requests,
+        'user_posts': user_posts,
+        'post_count': post_count
     }
 
     return render(request, 'users/user_profile.html', context)
 
 @login_required
 def search_users(request):
+
+    user=request.user   
     query = request.GET.get('q')
     object_list = User.objects.filter(username=query)
+    rec_follow_requests = FollowRequest.objects.filter(to_user=user)
+
+    # object_list_posts = Post.objects.filter(title=query, content=query)
     context = {
-        'users': object_list
+        'users': object_list,
+        'rec_follow_requests': rec_follow_requests
+        # 'posts': object_list_posts,
     }
 
     return render(request, 'users/search_users.html', context)
+
+
+@login_required
+def users_list(request):
+    user=request.user
+    users = Profile.objects.exclude(user=request.user)
+    my_followers = request.user.profile.followers.all()
+    rec_follow_requests = FollowRequest.objects.filter(to_user=user)
+
+
+    
+    sent_to = []
+    followers = []
+    for user in my_followers:
+        follower = user.followers.all()
+        for f in follower:
+            if f in followers:
+                follower = follower.exclude(user=f.user)
+        followers += follower
+    for i in my_followers:
+        if i in followers:
+            followers.remove(i)
+    if request.user.profile in followers:
+        followers.remove(request.user.profile)
+    random_list = random.sample(list(users), min(len(list(users)), 10))
+    for r in random_list:
+        if r in followers:
+            random_list.remove(r)
+    followers += random_list
+    # for i in my_followers:
+    #     if i in followers:
+    #         followers.remove(i)
+    # for se in sent_follow_requests:
+    #     sent_to.append(se.to_user)
+    context = {
+        'users': followers,
+        'sent': sent_to,
+        'my_followers': my_followers,
+        'rec_follow_requests': rec_follow_requests
+    }
+    return render(request, "users/users_list.html", context)
+
+
+@login_required
+def send_follower_request(request, id):
+    user = get_object_or_404(User, id=id)
+    frequest, created = FollowRequest.objects.get_or_create(from_user=request.user, to_user=user)
+    return HttpResponseRedirect('/users/profile/{}'.format(user.profile.slug))
+
+
+@login_required
+def cancel_follower_request(request, id):
+    user = get_object_or_404(User, id=id)
+    frequest = FollowRequest.objects.filter(from_user=request.user, to_user=user).first()
+    frequest.delete()
+    return HttpResponseRedirect('/users/profile/{}'.format(user.profile.slug))
+    # return HttpResponseRedirect('/users/profile/{}'.format(user.profile.slug))
+
+
+@login_required
+def accept_follower_request(request, id):
+    from_user = get_object_or_404(User, id=id)
+    frequest = FollowRequest.objects.filter(from_user=from_user, to_user=request.user).first()
+    user1 = frequest.to_user
+    user2 = from_user
+    user1.profile.followers.add(user2.profile)
+    user2.profile.followers.add(user1.profile)
+    if(FollowRequest.objects.filter(from_user=request.user, to_user=from_user).first()):
+        request_rev = FollowRequest.objects.filter(from_user=request.user, to_user=from_user).first()
+        request_rev.delete()
+    frequest.delete()
+    return HttpResponseRedirect('/users/profile/{}'.format(request.user.profile.slug))
+
+
+@login_required
+def delete_follower_request(request, id):
+    from_user = get_object_or_404(User, id=id)
+    frequest = FollowRequest.objects.filter(from_user=from_user, to_user=request.user).first()
+    frequest.delete()
+    return HttpResponseRedirect('/users/profile/{}'.format(request.user.profile.slug))
+
+
+def unfollow(request, id):
+    user_profile = request.user.profile
+    follower_profile= get_object_or_404(Profile, id=id)
+    user_profile.followers.remove(follower_profile)
+    follower_profile.followers.remove(user_profile)
+    return HttpResponseRedirect('/users/profile/{}'.format(follower_profile.slug))
+
+
+def follower_list(request):
+    
+    user=request.user
+    rec_follow_requests = FollowRequest.objects.filter(to_user=user)
+    p = request.user.profile
+    followers = p.followers.all()
+    context = {
+        'followers': followers,
+        'rec_follow_requests': rec_follow_requests
+    }
+
+    return render(request, "users/follower_list.html", context) 
+
+def user_follower_list(request, id):
+    p = Profile.objects.filter(id=id).first()
+    u = request.user
+    rec_follow_requests = FollowRequest.objects.filter(to_user=u)
+    followers = p.followers.all()
+    print(u, "u")
+    button_status = 'none'
+    if p not in request.user.profile.followers.all():
+        button_status = 'not_follower'
+
+        if len(FollowRequest.objects.filter(from_user=request.user).filter(to_user=p.user)) == 1:
+            button_status = 'follower_request_sent'
+
+        
+        if len(FollowRequest.objects.filter(from_user=p.user).filter(to_user=request.user)) == 1:
+            button_status = 'follower_request_received'
+
+    context = {
+        'u': u,
+        'followers': followers,
+        'button_status': button_status,
+        'rec_follow_requests': rec_follow_requests
+    }
+
+    return render(request, "users/user_follower_list.html", context) 
+
     
 
 

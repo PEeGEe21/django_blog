@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post, Comment
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Post, Comment, Like
+from users.models import FollowRequest
+from users.models import Profile
 from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.views.generic import (
@@ -13,7 +15,8 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import PostCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponse, response
+from django.http import HttpResponse, response, HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
 import json
 
 # posts = [
@@ -41,6 +44,11 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 
+# def like_view(request, pk):
+#     post = get_object_or_404(Post, id=request.POST.get('post_id'))
+#     post.likes.add(request.user)
+#     return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
+
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
@@ -53,7 +61,8 @@ class PostListView(ListView):
 
         comments = Comment.objects.all().count()
         context['comments'] = comments
-
+        rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+        context['rec_follow_requests'] = rec_follow_requests
         return context
 
 
@@ -64,11 +73,13 @@ class UserPostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 3
 
-    # def get_context_data(self, *args, **kwargs):
-    #     username = get_object_or_404(User, username=self.kwargs.get('username'))
-    #     context = super().get_context_data(*args,**kwargs)
-    #     context['user'] = User.objects.get(username=username)
-    #     return context
+    def get_context_data(self, *args, **kwargs):
+        # username = get_object_or_404(User, username=self.kwargs.get('username'))
+        context = super().get_context_data(*args,**kwargs)
+        # context['user'] = User.objects.get(username=username)
+        rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+        context['rec_follow_requests'] = rec_follow_requests
+        return context
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -85,6 +96,48 @@ def search_posts(request):
     }
     return render(request, "feed/search_posts.html", context)
 
+
+@login_required
+def like_unlike_post(request):
+    user = request.user
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        post_obj = Post.objects.get(id=post_id)
+        profile = Profile.objects.get(user=user)
+
+        if profile in post_obj.liked.all():
+            post_obj.liked.remove(profile)
+        else:
+            post_obj.liked.add(profile)
+
+        like, created = Like.objects.get_or_create(user=profile, post_id=post_id)
+
+        if not created:
+            if like.value=='Like':
+                like.value='Unlike'
+            else:
+                like.value='Like'
+        else:
+            like.value='Like'
+
+            post_obj.save()
+            like.save()
+
+        context = {
+            'value': like.value,
+            'likes': post_obj.liked.all().count(),
+            # 'page': post_obj.liked.all(),
+        }
+        # return render(request, "blog/post_detail.html", context)
+    # context={
+
+    # }
+    #     # return JsonResponse(data, safe=False)
+    return redirect('like_post')
+    # return render(request, "blog/post_detail.html")
+
+
+
 # @login_required
 # def like(request):
 #     post_id = request.GET.get("likeId", "")
@@ -93,7 +146,8 @@ def search_posts(request):
 #     liked = False
 #     liked = Like.objects.filter(user=user, post=post)
 #     if like:
-        
+#         # like.delete()/
+#         print('YOOOO')
 #     else:
 #         liked = True
 #         Like.objects.create(user=user, post=post)
@@ -102,6 +156,8 @@ def search_posts(request):
 #     }
 #     response = json.dumps(resp)
 #     return HttpResponse(response, content_type = "application/json")
+        # return JsonResponse({'liked': list(liked)})
+
 
 # @login_required
 # def like(request):
@@ -136,11 +192,23 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
         comments = Comment.objects.filter(post=self.get_object()).order_by('date_added')
         context['comments'] = comments
+        # stuff = get_object_or_404(Post, id=self.kwargs['pk'])
+        # print(stuff)
+        # likes = stuff.likes.filter(username=self.request.user)
+        # print(likes)
+        # context['likes'] = likes
+        # total_likes = stuff.likes.count()
+        # sent_follow_requests = Post.objects.filter(id=self.kwargs['pk'])
+        # user = get_object_or_404(User, username=self.kwargs.get('username'))
+
+        # print(total_likes)
+
+        # context['total_likes'] = total_likes
         if self.request.user.is_authenticated:
             context['comment_form'] = CommentForm(instance=self.request.user)
 

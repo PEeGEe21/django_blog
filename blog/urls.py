@@ -8,6 +8,8 @@ urlpatterns = [
     path('user/<str:username>', UserPostListView.as_view(), name='user-posts'),
     path('user/profile/', views.profile, name='user-profile'),
     # path('like/', views.like, name='post-like'),
+    # path('like/', views.like_view, name='like_post'),
+    path('like/', views.like_unlike_post, name='like_post'),
     # path('user/profile/', views.UserProfilePostListView.as_view(template_name='users/profile.html'), name='user-profile'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/new/', PostCreateView.as_view(), name='post-create'),

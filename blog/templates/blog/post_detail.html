@@ -8,9 +8,11 @@
             <article class="media content-section">
                   <div class="media-body">
                     <div class="article-metadata">
-                      <img class="rounded-circle article-img" alt="{{ object.author }}" src="{{ object.author.profile.image.url }}" />
+                      <a href="{{ object.author.profile.get_absolute_url }}">
+                        <img class="rounded-circle article-img" alt="{{ object.author }}" src="{{ object.author.profile.image.url }}" />
+                      </a>
                       <span class="h4">{{ post.author.profile.displayname }}</span>
-                      <span>@</span><a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                      <a class="mr-2" href="{{object.author.profile.get_absolute_url}}"><span>@</span>{{ object.author }}</a>
                       <small class="text-muted">{{ object.date_posted|timesince }}</small>
                         <!-- {% if object.author == user %}
                             <div>
@@ -53,14 +55,32 @@
                     </div>
                       <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                         <a href="#comment" class="d-flex align-items-center btn">
-                          <i class="fas fa-comment-alt icons"></i><span class="ml-2">{{ object.number_of_comments }}</span> 
+                          <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ object.number_of_comments }}</span> 
                         </a>
                         <button class="btn">
                           <i class="fa fa-retweet icons"></i>
                         </button>
-                        <button class="btn">
-                          <i class="fa fa-heart icons"></i>
-                        </button>
+
+
+                        <form action="{% url 'like_post' %}" method="POST" id="{{object.id}}" class="like-form "> 
+                          {% csrf_token %}
+                          <input type="hidden" name="post_id" value={{object.id}}>
+
+                          <button type="submit" name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{object.id}}">
+                            <!-- {% if request.user in post_obj.liked.all %} -->
+                              <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                            <!-- {% else %} -->
+                              <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                              <i class="far fa-heart icons like-btn{{object.id}}"></i><span class="ml-2 like-count{{object.id}}">{{ object.num_likes }}</span>
+                            <!-- {% endif %} -->
+                          </button>
+                        </form>
+
+
+                        <!-- <button class="btn">
+                          <i class="far fa-heart icons"></i>
+                        </button> -->
+
                         <button class="btn" id="{{object.id}}" data-toggle="modal" data-target="#modal-{{object.id}}">
                           <i class="fas fa-share-alt icons "></i>
                         </button>
@@ -83,10 +103,13 @@
                   <article class="media content-section">
                     <div class="media-body">
                       <div class="article-metadata post-detail">
-                        <img class="rounded-circle article-img" alt="{{ comment.author }}" src="{{ comment.author.profile.image.url }}" />
+                        <a href="{{ comment.author.profile.get_absolute_url }}" >
+                          <img class="rounded-circle article-img" alt="{{ comment.author }}" src="{{ comment.author.profile.image.url }}" />
+                        </a>
                         <span class="h4">{{ comment.author.profile.displayname }}</span>
-                        <span>@</span><a class="h6" href="{% url 'user-posts' object.author.username %}">{{ comment.author }}</a>
-                        replying <span>@</span><a class="mr-2 h6" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                        <a class="h6" href="{{ comment.author.profile.get_absolute_url }}"><span>@</span>{{ comment.author }}</a>
+                        <!-- <span>@</span><a class="h6" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a> -->
+                        replying <a class="mr-2 h6" href="{{object.author.profile.get_absolute_url}}"><span>@</span>{{ object.author }}</a>
                         <!-- <small class="text-muted">{{ comment.date_added|date:'m D, Y' }}</small>    -->
 
                         <div class="dropdown float-right position-relative mt-2">
@@ -125,10 +148,10 @@
                       </div>
                         <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                           <!-- <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> -->
-                              <i class="fas fa-comment-alt icons"></i>
+                              <i class="far fa-comment-alt icons"></i>
                           <!-- </a> -->
                           <i class="fa fa-retweet icons"></i>
-                          <i class="fa fa-heart icons"></i>
+                          <i class="far fa-heart icons"></i>
 
                           <button class="btn" id="{{comment.id}}" data-toggle="modal" data-target="#sharemodal-{{comment.id}}">
                             <i class="fas fa-share-alt icons "></i>
@@ -177,10 +200,11 @@
                             </div>
                             <div class="modal-body">
                                 <div class=" border-top border-sm pt-3">
-                                    <a href="" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
-                                    <a href="" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
+                                    <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                    <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
                                     <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
-                                    <a href="" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                    <a href="https://whatsapp.com/" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                    <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram share-icons"></i></a>
                                 </div>
                             </div>
                             
@@ -249,7 +273,7 @@
                                             <i class="fas fa-bookmark share-icons"></i>
                                             <span class="ml-1">Bookmarks</span>
                                         </a>
-                                        <a href="" class="">
+                                        <a href="" >
                                             <i class="fas fa-link share-icons"></i>
                                             <span class="ml-1">Copy Link</span>
                                         </a>
@@ -265,10 +289,11 @@
                         </div>
                         <div class="modal-body">
                             <div class=" border-top border-sm pt-3">
-                                <a href="" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
-                                <a href="" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
+                                <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
                                 <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
-                                <a href="" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                <a href="https://whatsapp.com/" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram share-icons"></i></a>
                             </div>
                         </div>
                         
@@ -279,5 +304,4 @@
 
             </div>
 
-            
 {% endblock content %}

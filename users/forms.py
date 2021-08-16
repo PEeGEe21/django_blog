@@ -40,3 +40,18 @@ class ProfileUpdateForm(forms.ModelForm):
             'coverimage',
 
         ]
+        widgets = {
+            # data-provide="datepicker" data-date-format="d-M-yyyy"
+            'image': forms.FileInput(attrs={
+                'class': 'dropify',
+            }),
+            'birthday': forms.DateInput(attrs={
+                'data-provide': 'datepicker',
+                'data-date-format': 'yyyy-mm-d'
+
+            }),
+            'coverimage': forms.FileInput(attrs={
+                'class': 'dropify',
+            }),
+        }
+        #dropify
