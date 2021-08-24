@@ -1,0 +1,177 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} {{ user.username|lower }}'s notification {% endblock %}
+
+    {% block content %}
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <!-- <div class="row">
+                    <div class="col-12"> -->
+                        
+
+                        {% if user == user %}
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="notify-widget kt-portlet kt-portlet--height-fluid">
+										<div class="kt-portlet__head">
+											<div class="kt-portlet__head-label">
+												<h3 class="kt-portlet__head-title">
+													Sent Request{{ sent_follow_requests.count|pluralize }} ({{ sent_follow_requests.count }})
+												</h3>
+											</div>
+											<div class="kt-portlet__head-toolbar">
+												<a href="#" class="dropdown-toggle h4 text-muted" data-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-h"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a class="dropdown-item disabled" href="">Demo Post</a></li>
+                                                    <li><a class="dropdown-item disabled" href="">Demo Post</a></li>
+                    
+                                                </ul>
+											</div>
+										</div>
+										<div class="kt-portlet__body">
+
+											<!--begin::k-widget4-->
+											<div class="kt-widget4">
+                                                
+                                                    {% if not sent_follow_requests %}
+                                                        <h5>no sent requests</h5>
+                                                    {% else %}
+                                                    {% for s_request in sent_follow_requests %}                                                        
+                                                        <div class="kt-widget4__item">
+                                                            <div class="kt-widget4__pic kt-widget4__pic--pic">
+                                                                
+                                                                <a href="{{ s_request.to_user.profile.get_absolute_url }}">
+                                                                    <img src="{{ s_request.to_user.profile.image.url }}" alt="{{ s_request.to_user.username }}">
+                                                                </a>
+                                                            </div>
+                                                            <div class="kt-widget4__info">
+                                                                <span href="#" class="kt-widget4__displayname">
+                                                                    {{ s_request.to_user.profile.displayname }}
+                                                                </span>
+                                                                
+                                                                <a href="{{ s_request.to_user.profile.get_absolute_url }}">
+                                                                    <p class="kt-widget4__text">
+                                                                        <span>@</span>{{ s_request.to_user.username }}
+                                                                    </p>
+                                                                </a>
+                                                                
+                                                            </div>
+                                                            <a class="btn btn-warning mr-2 btn-sm btn-label-brand btn-bold" href="{% url 'cancel_follower_request' s_request.to_user.id %}">Cancel</a>
+                                                        
+                                                        </div>
+                                                        {% endfor %}
+
+                                                    {% endif %}
+                                                
+                                                
+                                            </div>
+
+                                            
+
+											<!--end::Widget 9-->
+										</div>
+									</div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- <div class="col-md-6"> -->
+                                        <div class="notify-widget kt-portlet kt-portlet--height-fluid">
+                                            <div class="kt-portlet__head">
+                                                <div class="kt-portlet__head-label">
+                                                    <h3 class="kt-portlet__head-title">
+                                                        Received Request{{ rec_follow_requests.count|pluralize }} ({{ rec_follow_requests.count}})
+                                                    </h3>
+                                                </div>
+                                                <div class="kt-portlet__head-toolbar">
+                                                    <a href="#" class="dropdown-toggle h4 text-muted" data-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-h"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a class="dropdown-item disabled" href="">Demo Post</a></li>
+                                                        <li><a class="dropdown-item disabled" href="">Demo Post</a></li>
+                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="kt-portlet__body">
+    
+                                                <!--begin::k-widget4-->
+                                                <div class="kt-widget4">
+                                                    
+                                                        {% if not rec_follow_requests %}
+                                                            <h5>no received requests</h5>
+                                                        {% else %}
+                                                            {% for r_request in rec_follow_requests %}
+                                                            <div class="kt-widget4__item">
+                                                                <div class="kt-widget4__pic kt-widget4__pic--pic">
+                                                                    
+                                                                    <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                                                                        <img src="{{ r_request.from_user.profile.image.url }}" alt="{{ r_request.from_user.username }}">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="kt-widget4__info">
+                                                                    <span href="#" class="kt-widget4__displayname">
+                                                                        {{ r_request.from_user.profile.displayname }}
+                                                                    </span>
+                                                                    
+                                                                    <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                                                                        <p class="kt-widget4__text">
+                                                                            <span>@</span>{{ r_request.from_user.username }}
+                                                                        </p>
+                                                                    </a>
+                                                                    
+                                                                </div>
+                                                                <a class="btn btn-success mr-2 btn-sm btn-label-brand btn-bold" href="/users/follow-request/accept/{{ r_request.from_user.id }}">Accept</a>
+                                                                <a class="btn btn-danger mr-2 btn-sm" href="/users/follow-request/delete/{{ r_request.from_user.id }}">Reject</a>
+                                                            
+                                                            </div>
+                                                            {% endfor %}
+    
+                                                        {% endif %}
+                                                    
+                                                    
+                                                </div>
+    
+                                                
+    
+                                                <!--end::Widget 9-->
+                                            </div>
+                                        <!-- </div> -->
+    
+    
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        {% endif %}
+        
+        
+                   <!-- </div>
+                   
+                </div> -->
+
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+        {% if user.is_authenticated %}
+        <div>
+            <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                <a href="{% url 'post-create' %}">
+                    <i class="fas fa-plus add_new"></i>
+                </a>
+                
+            <!-- </button> -->
+        </div>
+        {% endif %}
+    </div>
+
+
+   {% endblock content %}

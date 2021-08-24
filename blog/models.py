@@ -45,6 +45,9 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['date_added']
+    
+    def get_absolute_url(self):
+        return reverse('comment-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return f'{self.post.title} - {self.author}'

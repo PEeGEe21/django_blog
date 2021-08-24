@@ -11,13 +11,14 @@ from django.conf import settings
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    displayname = models.CharField('Name', default='', max_length=25)
+    displayname = models.CharField('Name', default='', max_length=25, blank=True, null=True)
     slug = AutoSlugField(populate_from='user', null=True)
-    bio = models.TextField(default='')
+    bio = models.TextField(default='', blank=True, null=True)
     birthday = models.DateField('Birthday', blank=True, null=True)
-    image = models.ImageField(default='default.png', upload_to='profile_pics')
-    coverimage = models.ImageField(default='default.png', upload_to='cover_pics')
+    image = models.ImageField(default='default.png', upload_to='profile_pics', blank=True, null=True)
+    coverimage = models.ImageField(default='default.png', upload_to='cover_pics', blank=True, null=True)
     followers = models.ManyToManyField("Profile", blank=True)
+    # following = models.ManyToManyField("FollowProfile", blank=True)
 
 
     def __str__(self):
@@ -45,3 +46,10 @@ class FollowRequest(models.Model):
 
     def __str__(self):
         return "From {}, to {}".format(self.from_user.username, self.to_user.username)
+# class Following(models.Model):
+#     to_user_follow = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='to_user_follow', on_delete=models.CASCADE)
+#     from_user_follow = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='from_user_follow', on_delete=models.CASCADE)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return "From {}, to {}".format(self.from_user_follow.username, self.to_user_follow.username)

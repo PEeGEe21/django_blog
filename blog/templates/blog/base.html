@@ -5,11 +5,11 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        {% if title %}
-            <title>CCU Blog - {{ title }}</title>
-        {% else %}
-            <title>CCU Blog</title>
-        {% endif %}
+        
+        <title>
+            Peegee's Twitter :: {% block title %}{% endblock %}
+        </title>
+        
 
         <!-- CSS only -->
         <link rel="stylesheet" href="" type="text/css">
@@ -356,6 +356,9 @@
                 -ms-flex-align: start;
                 align-items: flex-start;
             } */
+            .kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title {
+                font-size: .825rem;
+            }
         }
         @media only screen and (max-width: 568px) {
             
@@ -402,6 +405,7 @@
     font-size: 1.2rem;
     font-weight: 500;
     color: #464457;
+    
 }
 .kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title a{
     color: #464457;
@@ -411,6 +415,22 @@
 .kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title small{
     font-size: 55%;
 }
+
+@media only screen and (max-width: 768px) {
+            
+            .kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title {
+                font-size: .825rem;
+            }
+
+            .kt-portlet .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title a{
+                color: #464457;
+                font-size: .825rem;
+            }
+
+            .theme-dark .article-metadata .h4{
+                font-size: .825rem;
+            }
+        }
 
 
 
@@ -689,6 +709,17 @@ body {
 
 }
 
+.theme-dark .not_found_text {
+    color: #eeece8;
+    /* border: 1px solid #eeece862; */
+
+}
+.theme-dark .all-posts {
+    color: #eeece8;
+    /* border: 1px solid #eeece862; */
+
+}
+
 .article-title {
     color: #495057;
 }
@@ -736,10 +767,40 @@ body {
     color: #eeece8;
 }
 
+.theme-dark .post-comment h2{
+    color: #eeece8;
+}
+
+.theme-dark .blog_comment h2,
+.theme-dark .blog_comment h5{
+    color: #eeece8;
+}
+.theme-dark h5.modal-title{
+    color: #495057;
+}
+
+.theme-dark .textarea-form {
+    color: #eeece8;
+}
+
+.theme-dark .textarea-form::placeholder {
+    color: #eeece8;
+}
+
+.theme-dark .menu-title {
+    color: #eeece8;
+}
+
+
+
 .theme-dark .edit-card{
     background: #070a0d;
 }
 
+.theme-dark .edit-card .form-control {
+    color: #fff;
+    background-color: transparent;
+}
 .theme-dark .nav-tabs>li>a, 
 .theme-dark .nav-pills>li>a {
     color: #eeece8;
@@ -790,7 +851,7 @@ body {
                   <i class=" fas fa-1x fa-ellipsis-v"></i>
                   right
                 </button> -->
-                <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect ml-auto"
+                <button type="button" class="btn btn-sm d-lg-none px-3 font-size-16 header-item waves-effect ml-auto text-light"
                 id="vertical-menu-btn">
                 <i class=" fas fa-1x fa-ellipsis-v"></i>
               </button>
@@ -893,8 +954,23 @@ body {
                                 <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-flash"></i><span>Moments</span></a></li>
                                 <li><a href="#" class="waves-effect d-flex align-items-center"><i class="la la-star-o"></i><span>Monetization</span></a></li>
                                 <!-- <div class="d-lg-none d-block"> -->
+                                    <li class="d-lg-none d-block"><a href="{% url 'users_list' %}" class="waves-effect d-flex align-items-center"><i class="la la-users"></i><span>All Users</span></a></li>
+
                                     <li class="d-lg-none d-block"><a href="{% url 'search_users' %}" class="waves-effect d-flex align-items-center"><i class="la la-search"></i><span>Search</span></a></li>
-                                    <li class="d-lg-none d-block"><a href="{% url 'profile' %}" class="waves-effect"><i class="far fa-bell"></i><span class="badge badge-pill badge-primary float-right">3</span><span>Notifications</span></a></li>
+                                    <li class="d-lg-none d-block">
+                                        <a href="{% url 'notification' %}" class="waves-effect"><i class="far fa-bell"></i>
+
+                                            {% if rec_follow_requests %}
+                                                    <span class="badge badge-pill badge-primary float-right">
+                                                        {{ rec_follow_requests.count }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-pill badge-primary float-right"></span>
+                                                {% endif %}
+                                        <!-- <span class="badge badge-pill badge-primary float-right">{{ rec_follow_requests.count }}</span> -->
+                                        <span>Notifications</span>
+                                        </a>
+                                    </li>
         
                                 <!-- </div> -->
 
@@ -909,7 +985,9 @@ body {
                                 </li>
                                 {% if user.is_authenticated %}
                                     <li>
+                                        <!-- <a href="#" class="waves-effect"><span>Help Center</span></a> -->
                                         <div class="theme-switch">
+                                            
                                             <input class="theme-switch_toggle" id="themeSwitchToggle" type="checkbox">
                                             <label class="theme-switch_label" for="themeSwitchToggle"></label>
                                         </div>                                    
@@ -948,18 +1026,37 @@ body {
         
                                         <li><a href="{% url 'users_list' %}" class="waves-effect d-flex align-items-center"><i class="la la-users"></i><span>All Users</span></a></li>
                                         <li><a href="{% url 'search_users' %}" class="waves-effect d-flex align-items-center"><i class="la la-search"></i><span>Search</span></a></li>
-                                        <li><a href="{% url 'profile' %}" class="waves-effect"><i class="far fa-bell"></i><span class="badge badge-pill badge-primary float-right">{{ rec_follow_requests.count }}</span><span>Notifications</span></a></li>
+                                        <li>
+                                            <a href="{% url 'notification' %}" class="waves-effect"><i class="far fa-bell"></i>
+                                            
+                                                {% if rec_follow_requests %}
+                                                    <span class="badge badge-pill badge-primary float-right">
+                                                        {{ rec_follow_requests.count }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-pill badge-primary float-right"></span>
+                                                {% endif %}
+
+
+                                            
+                                            <span>Notifications</span>
+                                            </a>
+                                        </li>
         
-        
-                                        <li class="menu-title">More</li>
         
                                         
-                                        <li><a href="{% url 'follower_list' %}" class=" waves-effect"><i class="la la-hand-peace-o"></i><span>Followers</span></a></li>
         
-                                        <li>
-                                            <a href="#" class="waves-effect"><i class="la la-sign-out"></i><span>Logout</span></a>
+                                        {% if request.user.is_authenticated %}
+                                            <li class="menu-title">More</li>
+
+                                            <li><a href="{% url 'follower_list' %}" class=" waves-effect"><i class="la la-hand-peace-o"></i><span>Followers</span></a></li>
                                             
-                                        </li>
+                                            <li>
+                                                <a href="{% url 'logout' %}" class="waves-effect"><i class="la la-sign-out"></i><span>Logout</span></a>
+                                                
+                                            </li>
+                                        {% endif %}
+                                        
         
                                     </ul>
                                 </div>

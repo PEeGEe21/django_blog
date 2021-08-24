@@ -264,6 +264,20 @@ def follower_list(request):
 
     return render(request, "users/follower_list.html", context) 
 
+# def following_list(request):
+    
+#     user=request.user
+#     sent_follow_requests = FollowRequest.objects.filter(from_user=user)
+#     p = request.user.profile
+#     following = p.following.all()
+#     print(following, 'following')
+#     print(sent_follow_requests, 'sent_follow_requests')
+#     context = {
+#         'following': following,
+#         'sent_follow_requests': sent_follow_requests
+#     }
+#     return render(request, "users/following_list.html", context) 
+
 def user_follower_list(request, id):
     p = Profile.objects.filter(id=id).first()
     u = request.user
@@ -289,6 +303,34 @@ def user_follower_list(request, id):
     }
 
     return render(request, "users/user_follower_list.html", context) 
+
+
+@login_required
+def notification(request):
+    # post = get_object_or_404(Post, pk=pk)
+    p = request.user.profile
+    user = p.user
+    sent_follow_requests = FollowRequest.objects.filter(from_user=p.user)
+    rec_follow_requests = FollowRequest.objects.filter(to_user=p.user)
+    followers = p.followers.all()
+    user_posts = Post.objects.filter(author=user).order_by('-date_posted')
+    user_comments = Comment.objects.filter(author=user)
+    post_count = Post.objects.filter(author=user).order_by('-date_posted').count()
+
+    print(rec_follow_requests, "rec_follow_requests")
+
+    posts=Post.objects.all()       
+    ctx={
+        "posts":posts, 
+        'user_posts': user_posts, 
+        'user_comments': user_comments, 
+        'followers_list': followers,
+        'sent_follow_requests': sent_follow_requests,
+        'rec_follow_requests': rec_follow_requests,
+        'post_count': post_count
+        }
+    
+    return render(request, 'users/notification.html', ctx)
 
     
 

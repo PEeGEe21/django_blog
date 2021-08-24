@@ -23,7 +23,7 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'username',
+            # 'username',
             'email',
             # 'displayname',
         ]
@@ -48,7 +48,6 @@ class ProfileUpdateForm(forms.ModelForm):
             'birthday': forms.DateInput(attrs={
                 'data-provide': 'datepicker',
                 'data-date-format': 'yyyy-mm-d'
-
             }),
             'coverimage': forms.FileInput(attrs={
                 'class': 'dropify',

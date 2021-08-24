@@ -1,5 +1,7 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
+{% block title %}New Post{% endblock %} 
+
 
     {% block content %}
     
@@ -23,6 +25,16 @@
                         </div>
                     </form>
                 </div>
+                {% if user.is_authenticated %}
+                    <div>
+                        <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                            <a href="{% url 'post-create' %}">
+                                <i class="fas fa-plus add_new"></i>
+                            </a>
+                            
+                        <!-- </button> -->
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

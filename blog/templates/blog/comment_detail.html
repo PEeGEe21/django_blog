@@ -132,7 +132,7 @@
                               
                               {% if comment.author == user %}
                               <li class=""><a class="dropdown-header">Coming soon</a></li>
-                                <li><a class="dropdown-item disabled" href="{% url 'comment-update' comment.id %}">Update Comment</a></li>
+                                <li><a class="dropdown-item" href="{% url 'comment-update' comment.id %}">Update Comment</a></li>
                                 <li><a class="dropdown-item" href="{% url 'comment-delete' comment.id %}">Delete Comment</a></li>
                               {% else %}
                               <li><a href="#" class="dropdown-item">Follow <span>@</span>{{comment.author}}</a></li>

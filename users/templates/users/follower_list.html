@@ -10,7 +10,7 @@
             {% block searchform %}
 
             <div class="row ">
-                <div class="col-12 col-sm-12 col-md-4 col-xl-9">
+                <div class="col-12 col-sm-12 col-md-6 col-xl-9">
                     <!-- <div class="card card-animate border-light shadow-sm"> -->
                         <!-- <div class="card-body"> -->
                             <form class=" my-2 my-lg-0 ml-5" action="{% url 'search_users' %}" method="get">
@@ -51,14 +51,14 @@
     
                                                 <h6 class="text-center">
                                                     <a href="/users/followers/{{user_p.id}}">
-                                                        {{ user_p.followers.count }}<span class="text-muted"> Follower{{ user_p.profile.followers.count|pluralize }}</span>
+                                                        {{ user_p.followers.count }}<span class="text-muted"> Follower{{ user_p.followers.count|pluralize }}</span>
                                                     </a>
                                                 </h6>
 
-                                                        <small class="d-flex justify-content-between">
-                                                            <!-- <a class="btn btn-success mr-2" href="/users/follow-request/send/{{user_p.id}}">Follow back</a> -->
+                                                        <!-- <small class="d-flex justify-content-between">
+                                                            <!-- <a class="btn btn-success mr-2" href="/users/follow-request/send/{{user_p.id}}">Follow back</a> 
                                                             <a class="btn btn-danger mr-2" href="{% url 'unfollow' user_p.id %}">Block</a>
-                                                        </small>
+                                                        </small> -->
                                                     
 
 
@@ -74,7 +74,7 @@
                             {% endfor %}
                         {% else %}
                             <br /><br />
-                            <h5>Find Users to Follow <a href="{% url 'users_list' %}" class="btn btn-outline-dark">here <i class="la la-arrow-right"></i></a></h5>
+                            <h5 class="not_found_text text-center">Find Users <a href="{% url 'users_list' %}" class="">here <i class="la la-arrow-right"></i></a></h5>
 
                             
                             

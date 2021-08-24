@@ -61,8 +61,9 @@ class PostListView(ListView):
 
         comments = Comment.objects.all().count()
         context['comments'] = comments
-        rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
-        context['rec_follow_requests'] = rec_follow_requests
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
         return context
 
 
@@ -84,6 +85,7 @@ class UserPostListView(ListView):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
+
 
 @login_required
 def search_posts(request):
@@ -197,6 +199,7 @@ class PostDetailView(DetailView):
 
         comments = Comment.objects.filter(post=self.get_object()).order_by('date_added')
         context['comments'] = comments
+        
         # stuff = get_object_or_404(Post, id=self.kwargs['pk'])
         # print(stuff)
         # likes = stuff.likes.filter(username=self.request.user)
@@ -211,6 +214,8 @@ class PostDetailView(DetailView):
         # context['total_likes'] = total_likes
         if self.request.user.is_authenticated:
             context['comment_form'] = CommentForm(instance=self.request.user)
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
 
         return context
 
@@ -228,7 +233,15 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
 # class PostCreateView(LoginRequiredMixin, CreateView):
 #     model = Post
 #     fields = ['title', 'content']
@@ -254,6 +267,15 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'content']
     template_name = 'blog/post_update.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -270,9 +292,81 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
+
     def test_func(self):
         post = self.get_object()
         if self.request.user == post.author:
+            return True
+        return False
+
+class CommentDetailView(DetailView):
+    model = Comment
+    template_name = 'blog/comment_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'blog/comment_update.html'
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comments = Comment.objects.all().count()
+        context['comments'] = comments
+        if self.request.user.is_authenticated:
+            rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+            context['rec_follow_requests'] = rec_follow_requests
+        return context
+
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+        #     def get_success_url(self):
+        # return reverse('exam-create')
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
             return True
         return False
 
