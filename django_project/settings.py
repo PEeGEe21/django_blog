@@ -32,7 +32,7 @@ SECRET_KEY = 'rddnml*d=7!9i%-p%cnze1353w9f+&1sgw3%t&y^h8lvo@oi*^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'herokuapp.com']
+ALLOWED_HOSTS = ['peegee-twitter.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
