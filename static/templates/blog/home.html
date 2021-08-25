@@ -1,0 +1,271 @@
+
+
+{% extends "blog/base.html" %}
+{% block title %}  Posts {% endblock %} 
+{% load crispy_forms_tags %}
+    {% block content %}
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                {% for post in posts %}
+                
+                        <article class="media content-section kt-portlet ">
+                            
+                            <a href="{{ post.author.profile.get_absolute_url }}" class="d-lg-block d-md-none d-none"><img class="d-flex align-self-start rounded-circle article-img" src="{{ post.author.profile.image.url }}" /></a>
+                            <div class="media-body">
+                                <div class=" kt-portlet__head">
+                                    <div class="kt-portlet__head-label d-flex align-items-center">
+                                        <h6 class="kt-portlet__head-title d-flex justify-content-between align-items-center">
+                                            <div class="d-lg-none ">
+                                                <a href="{{ post.author.profile.get_absolute_url }}"><img class="d-flex align-self-start rounded-circle article-img" src="{{ post.author.profile.image.url }}" /></a>
+
+                                            </div>
+                                            <div>
+                                                {{ post.author.profile.displayname }}
+                                                <a class="mr-2" href="{% url 'user-posts' post.author.username %}"><span>@</span>{{ post.author }}</a>
+                                                <small class="text-muted">{{ post.date_posted|timesince }}</small>
+                                                
+                                            </div>
+
+                                            <!-- <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small> -->
+                                        </h6>
+                                        <!-- {{ post.author.profile.get_absolute_url }} -->
+                                
+                                        
+                                    </div>
+                                    <div class="dropdown float-right position-relative">
+                                        <a href="#" class="dropdown-toggle h4 text-muted" data-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <!-- <li><a href="#" class="dropdown-item">Not interested in this post</a></li> -->
+                                            <!-- <li class="dropdown-divider"></li> -->
+                                            
+                                            
+                                            {% if post.author == user %}
+                                              <li><a class="dropdown-item" href="{% url 'post-update' post.id %}">Edit Post</a></li>
+                                              <li><a class="dropdown-item" href="{% url 'post-delete' post.id %}">Delete Post</a></li>
+                                            {% else %}
+                                            <li><a href="#" class="dropdown-item">Follow <span>@</span>{{post.author}}</a></li>
+                                            <li><a href="#" class="dropdown-item">Mute <span>@</span>{{post.author}}</a></li>
+                                            <li><a href="#" class="dropdown-item">Block <span>@</span>{{post.author}}</a></li>
+                                            <li class="dropdown-divider"></li>
+                                            <li><a href="#" class="dropdown-item">Report Post</a></li>
+              
+                                            {% endif %}
+                                        </ul>
+
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <a  href="{% url 'post-detail' post.id %}">
+                                    <h4 class="article-title">
+                                        {{ post.title }}
+                                    </h4>
+                                    <h6 class="article-content" >
+                                        {{ post.content }}
+                                    </h6>
+                                    
+                                </a>
+                                    
+                                    <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
+                                        <!-- <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> -->
+                                        <!-- <a href="{% url 'post-detail' post.id %}" class="d-flex align-items-center">
+                                            <i class="fas fa-comment-alt icons"></i><span class="ml-1">{{ comments }}</span> 
+                                        </a> -->
+                                        <a class="d-flex align-items-center btn" href="/post/{{post.id}}/#comment">
+                                            <i class="far fa-comment-alt icons mr-2"></i>
+                                            {{ post.number_of_comments }}
+                                        </a>
+                                        <button class="btn">
+                                            <i class="fa fa-retweet icons"></i>
+
+                                        </button>
+                                        
+                                        {% if user.is_authenticated %}
+
+                                        
+                                            <form action="{% url 'like_post' %}" method="POST" id="{{post.id}}" class="like-form "> 
+                                                {% csrf_token %}
+                                                <input type="hidden" name="post_id" value={{post.id}}>
+                    
+                                                <button type="submit" name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
+                                                <!-- {% if request.user in post_obj.liked.all %} -->
+                                                    <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                <!-- {% else %} -->
+                                                    <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                    <i class="far fa-heart icons like-btn{{post.id}}"></i><span class="ml-2 like-count{{post.id}}">{{ post.num_likes }}</span>
+                                                <!-- {% endif %} -->
+                                                </button>
+                                            </form>
+
+                                        {% else %}
+                                            <button name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
+                                                <!-- {% if request.user in post_obj.liked.all %} -->
+                                                    <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                <!-- {% else %} -->
+                                                    <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                    <i class="far fa-heart icons like-btn{{post.id}}"></i><span class="ml-2 like-count{{post.id}}">{{ post.num_likes }}</span>
+                                                <!-- {% endif %} -->
+                                            </button>
+                                        {% endif %}
+
+                                        <button class="btn" id="{{post.id}}" data-toggle="modal" data-target="#sharemodal-{{post.id}}">
+                                            <i class="fas fa-share-alt icons "></i>
+                                        </button>
+                                        
+                                    </div>
+                                </div>
+                            
+                                
+                                
+                            </div>   
+                                       
+                        </article>
+                            <!-- <div class="mb-4">
+                                <div class="collapse" id="collapseExample">
+                                    <div class="">
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                    </div>
+                                </div>
+                            </div>  -->
+                        
+                {% endfor %}
+
+                <div class="text-center align-items-center">
+                    {% if is_paginated %}
+
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+
+        {% if user.is_authenticated %}
+        <div>
+            <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                <a href="{% url 'post-create' %}">
+                    <i class="fas fa-plus add_new"></i>
+                </a>
+                
+            <!-- </button> -->
+        </div>
+        {% endif %}
+
+        {% for post in posts %}
+            <div class="modal fade" id="sharemodal-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="modalLongTitle">
+                                
+                                {% if post.author == user %}
+                                Share <span>Your</span> Post
+                                {% else %}
+                                    Share <span>@</span>{{post.author}}'s Post
+                                {% endif %}
+                                
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="pt-3">
+                                    <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                                        <a href="">
+                                            <i class="fas fa-bookmark share-icons"></i>
+                                            <span class="ml-1">Bookmarks</span>
+                                        </a>
+                                        <a href="" class="">
+                                            <i class="fas fa-link share-icons"></i>
+                                            <span class="ml-1">Copy Link</span>
+                                        </a>
+                                        <a href="">
+                                            <i class="fas fa-share-alt share-icons"></i>
+                                            <span class="ml-1">Share via</span>
+                                        </a>
+                                        
+
+                                        
+                                    <!-- </button> -->
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" border-top border-sm pt-3">
+                                <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook-f share-icons"></i></a>
+                                <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
+                                <a href="https://whatsapp.com/" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram share-icons"></i></a>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+
+                </div>
+
+            </div>
+        {% endfor %}
+        <div class="modal fade" id="coursemodal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLongTitle">
+                            Add Courses
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="POST" action="">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <div class="form-group d-flex justify-content-between">
+                                  <button class="btn btn-primary waves-effect" type="submit">Create</button>
+                              </div>
+                          </div>
+                          
+                      </form>
+                    </div>
+                    
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    
+{% endblock content %}

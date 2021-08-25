@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}New Post{% endblock %} 
+
+
+    {% block content %}
+    
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="content-section">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">
+                                Blog Post
+                            </legend>
+                            {{ form|crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-info" type="submit">Post</button>
+                            <a class="btn btn-outline-secondary" href="{% url 'blog-home' %}">Cancel</a>
+
+                        </div>
+                    </form>
+                </div>
+                {% if user.is_authenticated %}
+                    <div>
+                        <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                            <a href="{% url 'post-create' %}">
+                                <i class="fas fa-plus add_new"></i>
+                            </a>
+                            
+                        <!-- </button> -->
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
