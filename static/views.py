@@ -321,6 +321,7 @@ class CommentDetailView(DetailView):
             rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
             context['rec_follow_requests'] = rec_follow_requests
         return context
+        
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
     success_url = '/'

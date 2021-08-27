@@ -21,6 +21,7 @@ from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from users import views as user_views
 from django.conf.urls import url
+from django.views.static import serve
 
 
 urlpatterns = [
@@ -58,5 +59,7 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+    # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),]
