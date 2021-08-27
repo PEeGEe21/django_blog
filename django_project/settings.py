@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import environ
-env = environ.Env()
-environ.Env.read_env
+# import environ
+# env = environ.Env()
+# environ.Env.read_env
+
+from environ import Env
+env = Env()
+env.read_env()
 
 
 import os
@@ -134,7 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
@@ -143,6 +147,7 @@ STATICFILES_DIRS = [
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # STATICFILES_STORAGE= 'blog.storage.WhiteNoiseStaticFilesStorage'
 # STATICFILES_STORAGE= 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATICFILES_STORAGE= 'django_project.storage.WhiteNoiseStaticFilesStorage'
