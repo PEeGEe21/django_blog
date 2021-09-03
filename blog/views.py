@@ -60,6 +60,10 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
 
         comments = Comment.objects.all().count()
+        user_liked_post = Post.objects.filter(liked=self.request.user.profile)
+        print(user_liked_post)
+        context['user_liked_post'] = user_liked_post
+
         context['comments'] = comments
         if self.request.user.is_authenticated:
             rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
@@ -196,6 +200,12 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
+        user_liked_post = Post.objects.filter(liked=self.request.user.profile)
+        print(user_liked_post)
+        context['user_liked_post'] = user_liked_post
+        likers = Like.objects.filter(post=self.get_object())
+        print(likers, "likers")
+        context['liker'] = likers
 
         comments = Comment.objects.filter(post=self.get_object()).order_by('date_added')
         context['comments'] = comments

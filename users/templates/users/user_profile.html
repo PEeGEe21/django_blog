@@ -78,10 +78,10 @@
                                             
                                         </div>
                                         <!-- <p class="fw-normal mb-4">{{ user.date_joined }}</p> -->
-                                        <h6 class="">
-                                            <a href="/users/followers/{{u.id}}" >{{ u.profile.followers.count }}<span class="text-muted"> Follower{{ u.profile.followers.count|pluralize }}</span></a>
+                                        <h6 class="text-muted">
+                                            {{ u.profile.followers.count }}<a href="/users/followers/{{u.id}}" ><span class="text-muted"> Follower{{ u.profile.followers.count|pluralize }}</span></a>
                                         </h6>
-                                        <span class="heading">{{post_count}} <a href="{% url 'user-posts' u.username %}">Post{{ post_count|pluralize }}</a></span>
+                                        <span class="text-muted">{{post_count}} <a href="{% url 'user-posts' u.username %}" class="text-muted">Post{{ post_count|pluralize }}</a></span>
 
                                         
 
@@ -100,7 +100,7 @@
                                         <a class="nav-link" data-toggle="tab" href="#posts_and_comments">Posts &amp; Comments</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link disabled" data-toggle="tab" href="#likes">Likes</a>
+                                        <a class="nav-link" data-toggle="tab" href="#likes">Liked Posts</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -171,26 +171,27 @@
 
 
                                                                 {% if user.is_authenticated %}
-                          <form action="{% url 'like_post' %}" method="POST" id="{{user_posts.id}}" class="like-form "> 
-                            {% csrf_token %}
-                            <input type="hidden" name="post_id" value={{user_posts.id}}>
+                                                                        <form action="{% url 'like_post' %}" method="POST" id="{{user_posts.id}}" class="like-form "> 
+                                                                            {% csrf_token %}
+                                                                            <input type="hidden" name="post_id" value={{user_posts.id}}>
 
-                            <button type="submit" name="post_id" value="{{user_posts.id}}" class="btn d-flex align-items-center like-btn{{user_posts.id}}">
-                              <!-- {% if request.user in post_obj.liked.all %} -->
-                                <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
-                              <!-- {% else %} -->
-                                <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
-                                <i class="far fa-heart icons like-btn{{user_posts.id}}"></i><span class="ml-2 like-count{{user_posts.id}}">{{ user_posts.num_likes }}</span>
-                              <!-- {% endif %} -->
-                            </button>
-                          </form>
-                        {% else %}
+                                                                            <button type="submit" name="post_id" value="{{user_posts.id}}" class="btn d-flex align-items-center like-btn{{user_posts.id}}">
+                                                                            <!-- {% if request.user in post_obj.liked.all %} -->
+                                                                                <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                                            <!-- {% else %} -->
+                                                                                <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                                                <i class="far fa-heart icons like-btn{{user_posts.id}}"></i><span class="ml-2 like-count{{user_posts.id}}">{{ user_posts.num_likes }}</span>
+                                                                            <!-- {% endif %} -->
+                                                                            </button>
+                                                                        </form>
+                                                                    
+                                                                {% else %}
 
-                          <button name="post_id" value="{{user_posts.id}}" class="btn d-flex align-items-center like-btn{{user_posts.id}}">
-                              <i class="far fa-heart icons like-btn{{object.id}}"></i><span class="ml-2 like-count{{user_posts.id}}">{{ user_posts.num_likes }}</span>
-                          </button>
+                                                                <button name="post_id" value="{{user_posts.id}}" class="btn d-flex align-items-center like-btn{{user_posts.id}}">
+                                                                    <i class="far fa-heart icons like-btn{{object.id}}"></i><span class="ml-2 like-count{{user_posts.id}}">{{ user_posts.num_likes }}</span>
+                                                                </button>
 
-                        {% endif %}
+                                                                {% endif %}
 
                                                                 <!-- <button class="btn">
                                                                     <i class="far fa-heart icons"></i> 
@@ -265,19 +266,221 @@
                                         {% endif %}                                     
                                     </div>
                                     <div class="tab-pane" id="posts_and_comments" role="tabpanel">
-                                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                        {% for user_comments in user_comments %}
+
+                                        <article class="media content-section kt-portlet ">
+                                            <img class="rounded-circle article-img" src="{{ user_comments.post.author.profile.image.url }}" />
+                                            <div class="media-body">
+                                                <div class=" kt-portlet__head">
+                                                    <div class="kt-portlet__head-label">
+                                                        <h3 class="kt-portlet__head-title align-items-center">
+                                                            {{ user_comments.post.author.profile.displayname }}
+                                                            <a class="mr-2" href=""><span>@</span>{{ user_comments.post.author }}</a>
+                                                            <small class="text-muted">{{ user_comments.post.date_posted|date:'m D, Y' }}</small>
+                                                        </h3> 
+                                                    </div>
+                                                    <div class="dropdown float-right position-relative">
+                                                        <a href="#" class="dropdown-toggle h4 text-muted" data-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu dropdown-menu-right">
+                                                            <!-- <li><a href="#" class="dropdown-item">Not interested in this post</a></li> -->
+                                                            <!-- <li class="dropdown-divider"></li> -->
+                                                            
+                                                            
+                                                            {% if user_posts.author == user %}
+                                                                <li><a class="dropdown-item" href="{% url 'post-update' user_comments.post.id %}">Edit Post</a></li>
+                                                                <li><a class="dropdown-item" href="{% url 'post-delete' user_comments.post.id %}">Delete Post</a></li>
+                                                            {% else %}
+                                                                <li><a href="#" class="dropdown-item">Follow <span>@</span>{{user_comments.post.author}}</a></li>
+                                                                <li><a href="#" class="dropdown-item">Mute <span>@</span>{{user_comments.post.author}}</a></li>
+                                                                <li><a href="#" class="dropdown-item">Block <span>@</span>{{user_comments.post.author}}</a></li>
+                                                                <li class="dropdown-divider"></li>
+                                                                <li><a href="#" class="dropdown-item">Report Post</a></li>
+                            
+                                                            {% endif %}
+                                                        </ul>
+                
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-3">
+                                                    <h2>
+                                                        <a class="article-title" href="{% url 'post-detail' user_comments.post.id %}">{{ user_comments.post.title|safe }}</a>
+                                                    </h2>
+                                                    <a class="article-title" href="{% url 'post-detail' user_comments.post.id %}"><p class="article-content">{{ user_comments.post.content }}</p></a>
+                                                    <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
+                                                        <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_comments.post.id}}/#comment">
+                                                            <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ user_comments.post.number_of_comments }}</span>
+                                                        </a>
+                
+                                                        <button class="btn">
+                                                            <i class="fa fa-retweet icons"></i>
+                                                        </button class="btn">
+
+                            {% if user.is_authenticated %}
+                                                        
+
+                            
+                                <form action="{% url 'like_post' %}" method="POST" id="{{user_comments.post.id}}" class="like-form "> 
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value={{user_comments.post.id}}>
+        
+                                    <button type="submit" name="post_id" value="{{user_comments.post.id}}" class="btn d-flex align-items-center like-btn{{user_comments.post.id}}">
+                                        <i class="far fa-heart icons like-btn{{user_comments.post.id}}"></i><span class="ml-2 like-count{{user_comments.post.id}}">{{ user_comments.post.num_likes }}</span>
+                                    </button>
+                                </form>
+
+                            {% else %}
+                                <button name="post_id" value="{{user_comments.post.id}}" class="btn d-flex align-items-center like-btn{{user_comments.post.id}}">
+                                    <!-- {% if request.user in post_obj.liked.all %} -->
+                                        <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                    <!-- {% else %} -->
+                                        <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                        <i class="far fa-heart icons like-btn{{user_comments.post.id}}"></i><span class="ml-2 like-count{{user_comments.post.id}}">{{ user_comments.post.num_likes }}</span>
+                                    <!-- {% endif %} -->
+                                </button>
+                            {% endif %}
+
+                                                        <button class="btn" id="{{user_comments.post.id}}" data-toggle="modal" data-target="#sharemodal-{{user_comments.post.id}}">
+                                                            <i class="fas fa-share-alt icons "></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                            </div>                   
+                                        </article>
+
+                                        <article class="ml-4 my-4 media content-section">
+                                            <div class="media-body">
+                                              <div class="article-metadata post-detail">
+                                                <a href="{{ user_comments.author.profile.get_absolute_url }}" >
+                                                  <img class="rounded-circle article-img" alt="{{ user_comments.author }}" src="{{ user_comments.author.profile.image.url }}" />
+                                                </a>
+                                                <span class="h4">{{ user_comments.author.profile.displayname }}</span>
+                                                <a class="h6" href="{{ user_comments.author.profile.get_absolute_url }}"><span>@</span>{{ user_comments.author }}</a>
+                                                replying <a class="mr-2 h6" href="{{user_comments.post.author.profile.get_absolute_url}}"><span>@</span>{{ user_comments.post.author }}</a>
+                                                <!-- <small class="text-muted">{{ comment.date_added|date:'m D, Y' }}</small>    -->
+                        
+                                                <div class="dropdown float-right position-relative mt-2">
+                                                  <a href="#" class="dropdown-toggle h4 text-muted " data-toggle="dropdown"
+                                                      aria-expanded="false">
+                                                      <i class="fas fa-ellipsis-v"></i>
+                                                  </a>
+                                                  <ul class="dropdown-menu dropdown-menu-right">
+                                                      <!-- <li><a href="#" class="dropdown-item">Not interested in this post</a></li> -->
+                                                      <!-- <li class="dropdown-divider"></li> -->
+                                                      
+                                                      
+                                                      {% if user_comments.author == user %}
+                                                        <li class=""><a class="dropdown-header">Coming soon</a></li>
+                                                        <li><a class="dropdown-item disabled" href="">Update Comment</a></li>
+                                                        <li><a class="dropdown-item disabled" href="">Delete Comment</a></li>
+                                                        {% else %}
+                                                        <li><a href="#" class="dropdown-item">Follow <span>@</span>{{user_comments.author}}</a></li>
+                                                        <li><a href="#" class="dropdown-item">Mute <span>@</span>{{user_comments.author}}</a></li>
+                                                        <li><a href="#" class="dropdown-item">Block <span>@</span>{{user_comments.author}}</a></li>
+                                                        <li class="dropdown-divider"></li>
+                                                        <li><a href="#" class="dropdown-item">Report Comment</a></li>
+                        
+                                                        {% endif %}
+                                                  </ul>
+                                                </div>
+                                              </div>
+                        
+                        
+                                              <div class="border-bottom border-sm pt-3">
+                        
+                                                <!-- <h2 class="article-title">{{ object.title }}</h2> -->
+                                                <p class="article-content">{{  user_comments.content|safe  }}</p>
+                        
+                                                <small class="text-muted">{{ user_comments.date_added|date:'d M, Y' }}</small>
+                                              </div>
+                                                <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
+                                                  <!-- <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> -->
+                                                      <i class="far fa-comment-alt icons"></i>
+                                                  <!-- </a> -->
+                                                  <i class="fa fa-retweet icons"></i>
+                                                  <i class="far fa-heart icons"></i>
+                        
+                                                  <button class="btn" id="{{user_comments.id}}" data-toggle="modal" data-target="#sharemodal-{{user_comments.id}}">
+                                                    <i class="fas fa-share-alt icons "></i>
+                                                  </button>
+                                                </div>
+                                            </div>
+                                          </article>
+                                        
+                                        
+                                        <!--Comment Share Modal-->
+                                        <div class="modal fade" id="sharemodal-{{user_comments.id}}" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                              <div class="modal-content">
+                                                  
+                                                  <div class="modal-header">
+                                                      <h5 class="modal-title text-center" id="modalLongTitle">
+                                                          <!-- Share <span>@</span>{{comment.author}}'s Comment -->
+                                                          {% if comment.author == user %}
+                                                            Share <span>Your</span> Comment
+                                                          {% else %}
+                                                              Share <span>@</span>{{user_comments.author}}'s Comment
+                                                          {% endif %}
+                                                      </h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <div class="pt-3">
+                                                              <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                                                                  <a href="">
+                                                                      <i class="fas fa-bookmark share-icons"></i>
+                                                                      <span class="ml-1">Bookmarks</span>
+                                                                  </a>
+                                                                  <a href="" class="">
+                                                                      <i class="fas fa-link share-icons"></i>
+                                                                      <span class="ml-1">Copy Link</span>
+                                                                  </a>
+                                                                  <a href="">
+                                                                      <i class="fas fa-share-alt share-icons"></i>
+                                                                      <span class="ml-1">Share via</span>
+                                                                  </a>
+                                                                  
+                      
+                                                                  
+                                                              <!-- </button> -->
+                                                      </div>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <div class=" border-top border-sm pt-3">
+                                                          <a href="" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                                          <a href="" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
+                                                          <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
+                                                          <a href="" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                                      </div>
+                                                  </div>
+                                                  
+                                                  
+                                              </div>
+                      
+                                          </div>
+                      
+                                        </div>
+                                        {% endfor %}
                                     </div>
                                     <div class="tab-pane " id="likes" role="tabpanel">
-                                        {% for post in posts %}
+                                        {% for user_liked_post in user_liked_post %}
                                             <article class="media content-section kt-portlet ">
-                                                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}" />
+                                                <img class="rounded-circle article-img" src="{{ user_liked_post.author.profile.image.url }}" />
                                                 <div class="media-body">
                                                     <div class=" kt-portlet__head">
                                                         <div class="kt-portlet__head-label">
                                                             <h3 class="kt-portlet__head-title align-items-center">
-                                                                {{ post.author.profile.displayname }}
-                                                                <a class="mr-2" href=""><span>@</span>{{ post.author }}</a>
-                                                                <small class="text-muted">{{ post.date_posted|timesince }}</small>
+                                                                {{ user_liked_post.author.profile.displayname }}
+                                                                <a class="mr-2" href=""><span>@</span>{{ user_liked_post.author }}</a>
+                                                                <small class="text-muted">{{ user_liked_post.date_posted|timesince }}</small>
                                                                 <!-- <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small> -->
                                                             </h3>
                                                             
@@ -301,28 +504,43 @@
                                                     </div>
                                                     <div class="mt-3">
                                                         <h2>
-                                                            <a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+                                                            <a class="article-title" href="{% url 'post-detail' user_liked_post.id %}">{{ user_liked_post.title }}</a>
                                                         </h2>
-                                                        <a class="article-title" href="{% url 'post-detail' post.id %}"><p class="article-content">{{ post.content }}</p></a>
+                                                        <a class="article-title" href="{% url 'post-detail' user_liked_post.id %}"><p class="article-content">{{ user_liked_post.content }}</p></a>
                                                         <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
-                                                            <!-- <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> -->
-                                                            <!-- <a href="{% url 'post-detail' post.id %}" class="d-flex align-items-center">
-                                                                <i class="fas fa-comment-alt icons"></i><span class="ml-1">{{ comments }}</span> 
-                                                            </a> -->
-                                                            <button class="btn">
-                                                                <i class="fas fa-comment-alt icons"></i>
-                                                            </button>
-
+                                                            <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_liked_post.id}}/#comment">
+                                                                <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ user_liked_post.number_of_comments }}</span>
+                                                            </a>
+                    
                                                             <button class="btn">
                                                                 <i class="fa fa-retweet icons"></i>
-
                                                             </button class="btn">
-                                                                <button class="btn">
-                                                                            <i class="fa fa-heart icons"></i> 
-                                                                </button>
-                                                            <button class="btn">
-                                                                <i class="fas fa-share-alt icons "></i>
 
+                                                                {% if user.is_authenticated %}
+
+                                                                
+                                                                    <form action="{% url 'like_post' %}" method="POST" id="{{user_liked_post.id}}" class="like-form "> 
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="post_id" value={{user_liked_post.id}}>
+                                            
+                                                                        <button type="submit" name="post_id" value="{{user_liked_post.id}}" class="btn d-flex align-items-center like-btn{{user_liked_post.id}}">
+                                                                            <i class="far fa-heart icons like-btn{{user_liked_post.id}}"></i><span class="ml-2 like-count{{user_liked_post.id}}">{{ user_liked_post.num_likes }}</span>
+                                                                        </button>
+                                                                    </form>
+
+                                                                {% else %}
+                                                                    <button name="post_id" value="{{user_liked_post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
+                                                                        <!-- {% if request.user in post_obj.liked.all %} -->
+                                                                            <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                                        <!-- {% else %} -->
+                                                                            <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                                            <i class="far fa-heart icons like-btn{{user_liked_post.id}}"></i><span class="ml-2 like-count{{user_liked_post.id}}">{{ user_liked_post.num_likes }}</span>
+                                                                        <!-- {% endif %} -->
+                                                                    </button>
+                                                                {% endif %}
+
+                                                            <button class="btn" id="{{user_liked_post.id}}" data-toggle="modal" data-target="#sharemodal-{{user_liked_post.id}}">
+                                                                <i class="fas fa-share-alt icons "></i>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -330,13 +548,60 @@
                                                     
                                                 </div>                   
                                             </article>
-                                                <div class="mb-4">
-                                                    <div class="collapse" id="collapseExample">
-                                                        <div class="">
-                                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                            
+                                            <div class="modal fade" id="sharemodal-{{user_liked_post.id}}" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-center" id="modalLongTitle">
+                                                                <!-- Share <span>@</span>{{comment.author}}'s Comment -->
+                                                                {% if user_liked_post.author == user %}
+                                                                  Share <span>Your</span> Post
+                                                                {% else %}
+                                                                    Share <span>@</span>{{user_liked_post.author}}'s Post
+                                                                {% endif %}
+                                                            </h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
                                                         </div>
+                                                        <div class="modal-body">
+                                                            <div class="pt-3">
+                                                                    <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
+                                                                        <a href="">
+                                                                            <i class="fas fa-bookmark share-icons"></i>
+                                                                            <span class="ml-1">Bookmarks</span>
+                                                                        </a>
+                                                                        <a href="" class="">
+                                                                            <i class="fas fa-link share-icons"></i>
+                                                                            <span class="ml-1">Copy Link</span>
+                                                                        </a>
+                                                                        <a href="">
+                                                                            <i class="fas fa-share-alt share-icons"></i>
+                                                                            <span class="ml-1">Share via</span>
+                                                                        </a>
+                                                                        
+                            
+                                                                        
+                                                                    <!-- </button> -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class=" border-top border-sm pt-3">
+                                                                <a href="" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                                                <a href="" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
+                                                                <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
+                                                                <a href="" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
                                                     </div>
-                                                </div> 
+                            
+                                                </div>
+                            
+                                              </div>
                                         {% endfor %}
                                     </div>
                                 </div>

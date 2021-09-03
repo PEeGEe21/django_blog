@@ -6,7 +6,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.views.generic import ListView, CreateView
 from .models import Profile, FollowRequest
 from django.contrib.auth.models import User
-from blog.models import Comment, Post
+from blog.models import Comment, Post, Like
 from django.urls import reverse
 from django.db.models import Q, query
 from django.http import HttpResponse, response
@@ -60,6 +60,7 @@ def profileEdit(request):
 @login_required
 def profile(request):
     # post = get_object_or_404(Post, pk=pk)
+    user_info = request.user
     p = request.user.profile
     user = p.user
     sent_follow_requests = FollowRequest.objects.filter(from_user=p.user)
@@ -67,6 +68,12 @@ def profile(request):
     followers = p.followers.all()
     user_posts = Post.objects.filter(author=user).order_by('-date_posted')
     user_comments = Comment.objects.filter(author=user)
+    # like = Like.objects.filter(user=p)
+
+    print(like, "likee")
+    user_liked_post = Post.objects.filter(liked=p).order_by('-date_posted')
+    print(user_liked_post, "user_liked_post")
+
     post_count = Post.objects.filter(author=user).order_by('-date_posted').count()
 
     print(rec_follow_requests, "rec_follow_requests")
@@ -79,7 +86,8 @@ def profile(request):
         'followers_list': followers,
         'sent_follow_requests': sent_follow_requests,
         'rec_follow_requests': rec_follow_requests,
-        'post_count': post_count
+        'post_count': post_count,
+        'user_liked_post': user_liked_post,
         }
     
     return render(request, 'users/profile.html', ctx)
@@ -114,9 +122,15 @@ def profile_view(request, slug):
     p = Profile.objects.filter(slug=slug).first()
     # print(p, "p")
     u = p.user
+    p_user = request.user
     sent_follow_requests = FollowRequest.objects.filter(from_user=p.user)
-    rec_follow_requests = FollowRequest.objects.filter(to_user=p.user)
+    rec_follow_requests = FollowRequest.objects.filter(to_user=p_user)
     user_posts = Post.objects.filter(author=u).order_by('-date_posted')
+    user_comments = Comment.objects.filter(author=u)
+    print(user_comments, "user_comments")
+    user_liked_post = Post.objects.filter(liked=p).order_by('-date_posted')
+    
+    # user_liked_posts = Post.objects.filter()
     post_count = Post.objects.filter(author=u).order_by('-date_posted').count()
     print(rec_follow_requests)
 
@@ -140,7 +154,9 @@ def profile_view(request, slug):
         'sent_follow_requests': sent_follow_requests,
         'rec_follow_requests': rec_follow_requests,
         'user_posts': user_posts,
-        'post_count': post_count
+        'post_count': post_count,
+        'user_liked_post': user_liked_post,
+        'user_comments': user_comments,
     }
 
     return render(request, 'users/user_profile.html', context)

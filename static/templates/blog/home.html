@@ -90,20 +90,36 @@
                                         
                                         {% if user.is_authenticated %}
 
-                                        
-                                            <form action="{% url 'like_post' %}" method="POST" id="{{post.id}}" class="like-form "> 
-                                                {% csrf_token %}
-                                                <input type="hidden" name="post_id" value={{post.id}}>
-                    
-                                                <button type="submit" name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
-                                                <!-- {% if request.user in post_obj.liked.all %} -->
-                                                    <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
-                                                <!-- {% else %} -->
-                                                    <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
-                                                    <i class="far fa-heart icons like-btn{{post.id}}"></i><span class="ml-2 like-count{{post.id}}">{{ post.num_likes }}</span>
-                                                <!-- {% endif %} -->
-                                                </button>
-                                            </form>
+                                            {% if post in user_liked_post %}
+                                                <form action="{% url 'like_post' %}" method="POST" id="{{post.id}}" class="like-form "> 
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="post_id" value={{post.id}}>
+                        
+                                                    <button type="submit" name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
+                                                    <!-- {% if request.user in post_obj.liked.all %} -->
+                                                        <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                    <!-- {% else %} -->
+                                                        <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                        <i class="fa fa-heart icons like-btn{{post.id}}" style="color: red;"></i><span class="ml-2 like-count{{post.id}}">{{ post.num_likes }}</span>
+                                                    <!-- {% endif %} -->
+                                                    </button>
+                                                </form>
+
+                                            {% else %}
+                                                <form action="{% url 'like_post' %}" method="POST" id="{{post.id}}" class="like-form "> 
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="post_id" value={{post.id}}>
+                        
+                                                    <button type="submit" name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
+                                                    <!-- {% if request.user in post_obj.liked.all %} -->
+                                                        <!-- <i class="fas fa-heart icons" style="color:rgba(252, 63, 63, 0.979)"></i><span class="ml-2">{{ object.num_likes }}</span> -->
+                                                    <!-- {% else %} -->
+                                                        <!-- <i class="far fa-heart icons"></i><span class="ml-2">{{ total_likes }}</span> -->
+                                                        <i class="far fa-heart icons like-btn{{post.id}}"></i><span class="ml-2 like-count{{post.id}}">{{ post.num_likes }}</span>
+                                                    <!-- {% endif %} -->
+                                                    </button>
+                                                </form>
+                                            {% endif %}
 
                                         {% else %}
                                             <button name="post_id" value="{{post.id}}" class="btn d-flex align-items-center like-btn{{post.id}}">
@@ -219,10 +235,10 @@
                         </div>
                         <div class="modal-body">
                             <div class=" border-top border-sm pt-3">
-                                <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
-                                <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook-f share-icons"></i></a>
+                                <a href="https://twitter.com/intent/tweet?url=peegee-twitter.herokuapp.com/post/{{ post.id }}&text={{ post.title }}" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
+                                <a href="https://facebook.com/sharer/sharer.php?u=peegee-twitter.herokuapp.com/post/{{ post.id }}" target="_blank"><i class="fab fa-facebook-f share-icons"></i></a>
                                 <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
-                                <a href="https://whatsapp.com/" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
+                                <a href="https://whatsapp://send?text={{ post.content }}" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
                                 <!-- <a href="https://whatsapp.com/peegee-twitter.herokuapp.com/{{ object.author }}/{{ object.id }}" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a> -->
                                 <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram share-icons"></i></a>
                             </div>
