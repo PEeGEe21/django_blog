@@ -60,12 +60,12 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
 
         comments = Comment.objects.all().count()
-        user_liked_post = Post.objects.filter(liked=self.request.user.profile)
-        print(user_liked_post)
-        context['user_liked_post'] = user_liked_post
 
         context['comments'] = comments
         if self.request.user.is_authenticated:
+            user_liked_post = Post.objects.filter(liked=self.request.user.profile)
+            print(user_liked_post)
+            context['user_liked_post'] = user_liked_post
             rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
             context['rec_follow_requests'] = rec_follow_requests
         return context
@@ -200,9 +200,6 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_liked_post = Post.objects.filter(liked=self.request.user.profile)
-        print(user_liked_post)
-        context['user_liked_post'] = user_liked_post
         likers = Like.objects.filter(post=self.get_object())
         print(likers, "likers")
         context['liker'] = likers
@@ -224,8 +221,14 @@ class PostDetailView(DetailView):
         # context['total_likes'] = total_likes
         if self.request.user.is_authenticated:
             context['comment_form'] = CommentForm(instance=self.request.user)
+            
             rec_follow_requests = FollowRequest.objects.filter(to_user=self.request.user)
+
             context['rec_follow_requests'] = rec_follow_requests
+            
+            user_liked_post = Post.objects.filter(liked=self.request.user.profile)
+            print(user_liked_post)
+            context['user_liked_post'] = user_liked_post
 
         return context
 
@@ -238,6 +241,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content']
+    # form_class = PostCreationForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user

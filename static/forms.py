@@ -13,6 +13,7 @@ class PostCreationForm(forms.ModelForm):
         model = Post
         fields = '__all__'
         template_name = 'blog/home.html'
+        
 
 
 class CommentForm(forms.ModelForm):

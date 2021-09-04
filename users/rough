@@ -513,3 +513,12 @@
                                                         
                                                     </div>                   
                                                 </article>
+
+
+
+
+                                                <h2>
+                                                                    <a class="article-title" href="{% url 'post-detail' user_posts.id %}">{{ user_posts.title|safe }}</a>
+                                                                </h2>
+                                                                <a class="article-title" href="{% url 'post-detail' user_posts.id %}"><p class="article-content">{{ user_posts.content }}</p></a>
+                                                                

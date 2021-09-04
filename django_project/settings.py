@@ -21,6 +21,9 @@ env.read_env()
 
 import os
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
+    'cloudinary',
     'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,6 +89,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
+cloudinary.config(
+    cloud_name = "dvppgwypk",
+    api_key = "998525358323162",
+    api_secret = "MYHgTpOrpD2CXfdp8wPEzJUMGgY"
+)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

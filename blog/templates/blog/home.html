@@ -12,25 +12,27 @@
                 {% for post in posts %}
                 
                         <article class="media content-section kt-portlet ">
-                            
-                            <a href="{{ post.author.profile.get_absolute_url }}" class="d-lg-block d-md-none d-none"><img class="d-flex align-self-start rounded-circle article-img" src="{{ post.author.profile.image.url }}" alt="{{ post.author }}"/></a>
+                            <!-- d-lg-block d-md-none d-none -->
+                            <a href="{{ post.author.profile.get_absolute_url }}" class="">
+                                <img class="d-flex align-self-start rounded-circle article-img" src="{{ post.author.profile.image.url }}" alt="{{ post.author }}"/>
+                            </a>
                             <div class="media-body">
                                 <div class=" kt-portlet__head">
                                     <div class="kt-portlet__head-label d-flex align-items-center">
-                                        <h6 class="kt-portlet__head-title d-flex justify-content-between align-items-center">
-                                            <div class="d-lg-none ">
+                                        <!-- <h6 class=""> -->
+                                            <!-- <div class="d-lg-none ">
                                                 <a href="{{ post.author.profile.get_absolute_url }}"><img class="d-flex align-self-start rounded-circle article-img" src="{{ post.author.profile.image.url }}" alt="{{ post.author }}" /></a>
 
-                                            </div>
-                                            <div>
-                                                {{ post.author.profile.displayname }}
-                                                <a class="mr-2" href="{% url 'user-posts' post.author.username %}"><span>@</span>{{ post.author }}</a>
+                                            </div> -->
+                                            <div class="kt-portlet__head-title d-flex justify-content-between align-items-center">
+                                                {{ post.author.profile.displayname }} 
+                                                <a class="mx-2" href="{% url 'user-posts' post.author.username %}"><span> @</span>{{ post.author }}</a>
                                                 <small class="text-muted">{{ post.date_posted|timesince }}</small>
                                                 
                                             </div>
 
                                             <!-- <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small> -->
-                                        </h6>
+                                        <!-- </h6> -->
                                         <!-- {{ post.author.profile.get_absolute_url }} -->
                                 
                                         

@@ -47,19 +47,43 @@
                       </div>
                     </div>
 
-                    <div class="border-bottom border-sm">
+                    <div class="border-bottom post_detail_section border-sm">
 
                       <h2 class="article-title">{{ object.title }}</h2>
                       <p class="article-content">{{ object.content }}</p>
 
-                      <small class="text-muted">{{ object.date_posted|time }} <span>|</span> {{ object.date_posted|date:'m D, Y' }}</small>
+                      <small class="text-muted post_detail_time">{{ object.date_posted|time }} <span>|</span> {{ object.date_posted|date:'m D, Y' }}</small>
                     </div>
-                    <div class="border-bottom border-sm py-4">
-<a href="">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
-<a href="" class="mx-5">Retweets</a>
-<a href="" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                    {% if object.number_of_comments == 0 and object.num_likes == 0 %}
+                      <div class="border-bottom d-none border-sm py-4">
+                        {% if object.number_of_comments == 0 %}
+                          <a href="" class="d-none">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                        {% else %}
+                          <a href="" class="mr-3">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                        {% endif %}
 
-                    </div>
+                        {% if object.num_likes == 0 %}
+                          <a href="" class="d-none" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                        {% else %}
+                          <a href="" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                        {% endif %}                          
+                      </div>
+                    {% else %}
+                      <div class="border-bottom border-sm py-4">
+                        {% if object.number_of_comments == 0 %}
+                          <a href="" class="d-none">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                        {% else %}
+                          <a href="" class="mr-3">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                        {% endif %}
+
+                        {% if object.num_likes == 0 %}
+                          <a href="" class="d-none" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                        {% else %}
+                          <a href="" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                        {% endif %} 
+                      </div>
+                    {% endif %}
+                    
                       <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                         <a href="#comment" class="d-flex align-items-center btn">
                           <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ object.number_of_comments }}</span> 
@@ -131,12 +155,15 @@
                 <p>{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</p>
                 <hr>
                 {% for comment in comments %}
+
                   <article class="media content-section mb-3">
-                    <div class="media-body">
-                      <div class="article-metadata post-detail">
-                        <a href="{{ comment.author.profile.get_absolute_url }}" >
+                    <a href="{{ comment.author.profile.get_absolute_url }}" >
                           <img class="rounded-circle article-img" alt="{{ comment.author }}" src="{{ comment.author.profile.image.url }}" />
                         </a>
+                    <div class="media-body">
+                      
+                      <div class="article-metadata post-detail">
+                        
                         <span class="h4">{{ comment.author.profile.displayname }}</span>
                         <a class="h6" href="{{ comment.author.profile.get_absolute_url }}"><span>@</span>{{ comment.author }}</a>
                         <!-- <span>@</span><a class="h6" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a> -->
@@ -170,12 +197,13 @@
                       </div>
 
 
-                      <div class="border-bottom border-sm pt-3">
+                      <!-- <div class="border-bottom border-sm pt-3"> -->
+                      <div class=" pt-3">
 
                         <!-- <h2 class="article-title">{{ object.title }}</h2> -->
                         <p class="article-content">{{ comment.content|safe  }}</p>
 
-                        <small class="text-muted">{{ comment.date_added|date:'d M, Y' }}</small>
+                        <!-- <small class="text-muted">{{ comment.date_added|date:'d M, Y' }}</small> -->
                       </div>
                         <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                             <button class="btn">

@@ -1,12 +1,21 @@
+import os
+import random
+from collections import defaultdict
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from autoslug import AutoSlugField
 from users.models import Profile
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
+def photo_path(instance, filename):
+    basefilename, file_extension = os.path.splitext(filename)
+    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+    randomstr = ''.join((random.choice(chars)) for x in range(16))
+    return 'uploads/{basename}{randomstring}{ext}'.format(basename = basefilename.replace(" ", ""), randomstring = randomstr, ext = file_extension)
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
@@ -15,6 +24,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     # likes = models.ManyToManyField(User, blank=True, related_name='blog_posts')
     liked = models.ManyToManyField(Profile, blank=True, related_name='likes')
+    # featured_image = CloudinaryField('image')
 
     objects = models.Manager()
 

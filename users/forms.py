@@ -15,6 +15,12 @@ class UserRegisterForm(UserCreationForm):
             'password1',
             'password2'
         ]
+        widgets = {
+            # data-provide="datepicker" data-date-format="d-M-yyyy"
+            'username': forms.Textarea(attrs={
+                'autocomplete': 'off',
+            }),
+        }
 
 
 class UserUpdateForm(forms.ModelForm):

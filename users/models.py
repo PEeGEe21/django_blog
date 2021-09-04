@@ -4,6 +4,9 @@ from PIL import Image
 from autoslug import AutoSlugField
 from django.urls import reverse
 from django.conf import settings
+from cloudinary.models import CloudinaryField
+
+
 
 
 
@@ -16,7 +19,10 @@ class Profile(models.Model):
     bio = models.TextField(default='', blank=True, null=True)
     birthday = models.DateField('Birthday', blank=True, null=True)
     image = models.ImageField(default='default.png', upload_to='profile_pics', blank=True, null=True)
-    coverimage = models.ImageField(default='default.png', upload_to='cover_pics', blank=True, null=True)
+    coverimage = models.ImageField(default='default_cover.jpg', upload_to='cover_pics', blank=True, null=True)
+
+    # image = CloudinaryField('image', blank=True, default='default.png')
+    # coverimage = CloudinaryField('coverimage', blank=True, default='default.png')
     followers = models.ManyToManyField("Profile", blank=True)
     # following = models.ManyToManyField("FollowProfile", blank=True)
 
