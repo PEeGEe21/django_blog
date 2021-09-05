@@ -65,22 +65,29 @@
                                 </div>
                                 <div class="bio-text">
                                     <p class="fw-normal mb-">{{ user.profile.bio }}</p>
-
-                                    <div class="d-flex align-items-center ">
+                                    <ul class="d-inline-flex list-unstyled">
                                         {% if user.profile.birthday %}
+                                            <li>
                                                 <p class="fw-normal mb-4 mr-3 "><i class="la la-birthday-cake mr-1"></i>
-                                                    <span>Born </span>{{ user.profile.birthday|date:'F d, Y' }}
+                                                <span>Born </span>{{ user.profile.birthday|date:'F d, Y' }}
                                                 </p>
-                                            {% else %}
-                                                <p class="fw-normal mb-4 mr-3 ">
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <p class="fw-normal mb-4 mr-3">
                                                     <i class="la la-birthday-cake mr-1"></i><span>{{ user.username }} </span>add your Birthday!!
                                                 </p>
-                                            {% endif %}
+                                            </li>
+                                        {% endif %}
                                         <!-- <p class="fw-normal mb-4 mr-3"><i class="la la-birthday-cake mr-1"></i><span>Joined </span>{{ user.profile.birthday|date:'F d, Y' }}</p> -->
+                                        <li>
+                                            <p class="fw-normal mb-4"><i class="far fa-calendar-alt mr-2"></i><span>Joined </span>{{ user.date_joined|date:'F Y' }}</p>
+                                        </li>
 
-                                        <p class="fw-normal mb-4"><i class="far fa-calendar-alt mr-2"></i><span>Joined </span>{{ user.date_joined|date:'F Y' }}</p>
-    
-                                    </div>
+                                    </ul>
+                                    <!-- <div class="d-flex align-items-center ">
+                                        
+                                    </div> -->
                                     
                                     <h6 class="text-muted">
                                         {{ user.profile.followers.count }}<a href="{% url 'follower_list' %}" ><span class="text-muted"> Follower{{ user.profile.followers.count|pluralize }}</span></a>
@@ -117,6 +124,9 @@
                                                 
 
                                             {% else %}
+                                            <div class="header-border">
+
+                                            </div>
 
                                                 {% for user_posts in user_posts %}
                                                     <article class="media content-section kt-portlet ">
@@ -164,7 +174,7 @@
                                                                     {{ user_posts.title|safe }}
                                                                     </h2>
 
-                                                                    <p class="article-content">{{ user_posts.content }}</p>
+                                                                    <p class="article-content">{{ user_posts.content|safe }}</p>
                                                                 </a>
                                                                 <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                                                                     <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_posts.id}}/#comment">
@@ -276,6 +286,9 @@
                                         </div>
                                         
                                         <div class="tab-pane" id="posts_and_comments" role="tabpanel">
+                                            <div class="header-border">
+
+                                            </div>
                                             {% for user_comments in user_comments %}
 
                                             <article class="media content-section kt-portlet ">
@@ -322,7 +335,7 @@
                                                                 {{ user_comments.post.title|safe }}
                                                             </h2>
 
-                                                            <p class="article-content">{{ user_comments.post.content }}</p>
+                                                            <p class="article-content">{{ user_comments.post.content|safe }}</p>
                                                         </a>
                                                         
                                                         <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
@@ -500,6 +513,9 @@
                                             {% endfor %}
                                         </div>
                                         <div class="tab-pane " id="likes" role="tabpanel">
+                                            <div class="header-border">
+
+                                            </div>
                                             {% for user_liked_post in user_liked_post %}
                                                 <article class="media content-section kt-portlet ">
                                                     <img class="rounded-circle article-img" src="{{ user_liked_post.author.profile.image.url }}" />
@@ -664,7 +680,6 @@
                 <!-- end row-->
 
                 
-                <!-- end row-->
 
             </div> <!-- container-fluid -->
         </div>

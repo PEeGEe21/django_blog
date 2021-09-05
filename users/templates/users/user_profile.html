@@ -63,20 +63,27 @@
                                     </div>
                                     <div class="bio-text">
                                         <p class="fw-normal mb-4">{{ u.profile.bio }}</p>
-                                        <div class="d-flex align-items-center ">
+
+                                        <ul class="d-inline-flex list-unstyled">
                                             {% if u.profile.birthday %}
-                                                <p class="fw-normal mb-4 mr-3 "><i class="la la-birthday-cake mr-1"></i>
-                                                    <span>Born </span>{{ u.profile.birthday|date:'F d, Y' }}
-                                                </p>
+                                                <li>
+                                                    <p class="fw-normal mb-4 mr-3 "><i class="la la-birthday-cake mr-1"></i>
+                                                        <span>Born </span>{{ u.profile.birthday|date:'F d, Y' }}
+                                                    </p>
+                                                </li>
                                             {% else %}
-                                                <p class="fw-normal mb-4 mr-3 ">
-                                                    <i class="la la-birthday-cake mr-1"></i><span>{{ u.username }} </span>has no Birthday yet
-                                                </p>
+                                                <li>
+                                                    <p class="fw-normal mb-4 mr-3 ">
+                                                        <i class="la la-birthday-cake mr-1"></i><span>{{ u.username }} </span>has no Birthday yet
+                                                    </p>
+                                                </li>
                                             {% endif %}
+                                            <!-- <p class="fw-normal mb-4 mr-3"><i class="la la-birthday-cake mr-1"></i><span>Joined </span>{{ user.profile.birthday|date:'F d, Y' }}</p> -->
+                                            <li>
+                                                <p class="fw-normal mb-4"><i class="far fa-calendar-alt mr-2"></i><span>Joined </span>{{ u.date_joined|date:'F Y' }}</p>
+                                            </li>
     
-                                            <p class="fw-normal mb-4"><i class="far fa-calendar-alt mr-2"></i><span>Joined </span>{{ u.date_joined|date:'F Y' }}</p>
-                                            
-                                        </div>
+                                        </ul>
                                         <!-- <p class="fw-normal mb-4">{{ user.date_joined }}</p> -->
                                         <h6 class="text-muted">
                                             {{ u.profile.followers.count }}<a href="/users/followers/{{u.id}}" ><span class="text-muted"> Follower{{ u.profile.followers.count|pluralize }}</span></a>
@@ -114,7 +121,11 @@
 
                                         {% else %}
 
+                                        <div class="header-border">
+
+                                        </div>
                                             {% for user_posts in user_posts %}
+                                            
                                                 <article class="media content-section kt-portlet ">
                                                     <img class="rounded-circle article-img" src="{{ user_posts.author.profile.image.url }}" />
                                                     <div class="media-body">
@@ -154,10 +165,23 @@
                                                         </div>
 
                                                         <div class="mt-3">
-                                                            <h2>
+
+
+                                                            <!-- <h2>
                                                                 <a class="article-title" href="{% url 'post-detail' user_posts.id %}">{{ user_posts.title|safe }}</a>
                                                             </h2>
-                                                            <a class="article-title" href="{% url 'post-detail' user_posts.id %}"><p class="article-content">{{ user_posts.content }}</p></a>
+                                                            <a class="article-title" href="{% url 'post-detail' user_posts.id %}"><p class="article-content">{{ user_posts.content }}</p></a> -->
+                                                            
+                                                            <a href="{% url 'post-detail' user_posts.id %}">
+                                                                <h2 class="article-title">
+                                                                {{ user_posts.title|safe }}
+                                                                </h2>
+
+                                                                <p class="article-content">{{ user_posts.content|safe }}</p>
+                                                            </a>
+                                                            
+                                                            
+                                                            
                                                             <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                                                                 <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_posts.id}}/#comment">
 
@@ -266,6 +290,9 @@
                                         {% endif %}                                     
                                     </div>
                                     <div class="tab-pane" id="posts_and_comments" role="tabpanel">
+                                        <div class="header-border">
+
+                                        </div>
                                         {% for user_comments in user_comments %}
 
                                         <article class="media content-section kt-portlet ">
@@ -307,10 +334,19 @@
                                                 </div>
 
                                                 <div class="mt-3">
-                                                    <h2>
+                                                    <!-- <h2>
                                                         <a class="article-title" href="{% url 'post-detail' user_comments.post.id %}">{{ user_comments.post.title|safe }}</a>
                                                     </h2>
-                                                    <a class="article-title" href="{% url 'post-detail' user_comments.post.id %}"><p class="article-content">{{ user_comments.post.content }}</p></a>
+                                                    <a class="article-title" href="{% url 'post-detail' user_comments.post.id %}"><p class="article-content">{{ user_comments.post.content }}</p></a> -->
+                                                    
+                                                    <a href="{% url 'post-detail' user_comments.post.id %}">
+                                                        <h2 class="article-title">
+                                                            {{ user_comments.post.title|safe }}
+                                                        </h2>
+
+                                                        <p class="article-content">{{ user_comments.post.content|safe }}</p>
+                                                    </a>
+                                                    
                                                     <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                                                         <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_comments.post.id}}/#comment">
                                                             <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ user_comments.post.number_of_comments }}</span>
@@ -473,6 +509,9 @@
                                         {% endfor %}
                                     </div>
                                     <div class="tab-pane " id="likes" role="tabpanel">
+                                        <div class="header-border">
+
+                                        </div>
                                         {% for user_liked_post in user_liked_post %}
                                             <article class="media content-section kt-portlet ">
                                                 <img class="rounded-circle article-img" src="{{ user_liked_post.author.profile.image.url }}" />
@@ -505,10 +544,19 @@
                                                         
                                                     </div>
                                                     <div class="mt-3">
-                                                        <h2>
+                                                        <!-- <h2>
                                                             <a class="article-title" href="{% url 'post-detail' user_liked_post.id %}">{{ user_liked_post.title }}</a>
                                                         </h2>
-                                                        <a class="article-title" href="{% url 'post-detail' user_liked_post.id %}"><p class="article-content">{{ user_liked_post.content }}</p></a>
+                                                        <a class="article-title" href="{% url 'post-detail' user_liked_post.id %}"><p class="article-content">{{ user_liked_post.content }}</p></a> -->
+                                                        
+                                                        <a href="{% url 'post-detail' user_liked_post.id %}">
+                                                            <h2 class="article-title">
+                                                                {{ user_liked_post.title|safe }}
+                                                            </h2>
+    
+                                                            <p class="article-content">{{ user_liked_post.content|safe }}</p>
+                                                        </a>
+                                                        
                                                         <div class="action-btns d-flex text-center justify-content-around align-items-center mx-auto" >
                                                             <a class="d-flex align-items-center btn justify-content-around" href="/post/{{user_liked_post.id}}/#comment">
                                                                 <i class="far fa-comment-alt icons"></i><span class="ml-2">{{ user_liked_post.number_of_comments }}</span>

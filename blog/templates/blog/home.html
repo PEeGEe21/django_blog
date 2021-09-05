@@ -8,7 +8,9 @@
 
         <div class="page-content">
             <div class="container-fluid">
+                <div class="header-border">
 
+                </div>
                 {% for post in posts %}
                 
                         <article class="media content-section kt-portlet ">
@@ -28,7 +30,6 @@
                                                 {{ post.author.profile.displayname }} 
                                                 <a class="mx-2" href="{% url 'user-posts' post.author.username %}"><span> @</span>{{ post.author }}</a>
                                                 <small class="text-muted">{{ post.date_posted|timesince }}</small>
-                                                
                                             </div>
 
                                             <!-- <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small> -->
