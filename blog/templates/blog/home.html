@@ -27,8 +27,8 @@
 
                                             </div> -->
                                             <div class="kt-portlet__head-title d-flex justify-content-between align-items-center">
-                                                {{ post.author.profile.displayname }} 
-                                                <a class="mx-2" href="{% url 'user-posts' post.author.username %}"><span> @</span>{{ post.author }}</a>
+                                                
+                                                {{ post.author.profile.displayname }}<a class="ml-1 mr-2" href="{% url 'user-posts' post.author.username %}"><span> @</span>{{ post.author }}</a>
                                                 <small class="text-muted">{{ post.date_posted|timesince }}</small>
                                             </div>
 

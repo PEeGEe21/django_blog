@@ -57,29 +57,29 @@
                     {% if object.number_of_comments == 0 and object.num_likes == 0 %}
                       <div class="border-bottom d-none border-sm py-3 py-lg-4">
                         {% if object.number_of_comments == 0 %}
-                          <a href="" class="d-none">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                          <a class="d-none text-white">{{ object.number_of_comments }} <span class="text-muted">Comment{{ object.number_of_comments|pluralize }}</span></a>
                         {% else %}
-                          <a href="" class="mr-3">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                          <a class="mr-3 text-white">{{ object.number_of_comments }} <span class="text-muted">Comment{{ object.number_of_comments|pluralize }}</span></a>
                         {% endif %}
 
                         {% if object.num_likes == 0 %}
-                          <a href="" class="d-none" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                          <a href="" class="d-none text-white" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} <span class="text-muted"></span>Like{{ object.num_likes|pluralize }}</a>
                         {% else %}
-                          <a href="" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                          <a href="" class="text-white" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} <span class="text-muted"></span>Like{{ object.num_likes|pluralize }}</a>
                         {% endif %}                          
                       </div>
                     {% else %}
                       <div class="border-bottom border-sm py-3 py-lg-4">
                         {% if object.number_of_comments == 0 %}
-                          <a href="" class="d-none">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                          <a class="d-none text-white">{{ object.number_of_comments }} <span class="text-muted">Comment{{ object.number_of_comments|pluralize }}</span></a>
                         {% else %}
-                          <a href="" class="mr-3">{{ object.number_of_comments }} Comment{{ object.number_of_comments|pluralize }}</a>
+                          <a class="mr-3 text-white">{{ object.number_of_comments }} <span class="text-muted">Comment{{ object.number_of_comments|pluralize }}</span></a>
                         {% endif %}
 
                         {% if object.num_likes == 0 %}
-                          <a href="" class="d-none" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                          <a href="" class="d-none text-white" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} <span class="text-muted">Like{{ object.num_likes|pluralize }}</span></a>
                         {% else %}
-                          <a href="" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} Like{{ object.num_likes|pluralize }}</a>
+                          <a href="" class="text-white" data-toggle="modal" data-target="#likemodal">{{ object.num_likes }} <span class="text-muted">Like{{ object.num_likes|pluralize }}</span></a>
                         {% endif %} 
                       </div>
                     {% endif %}
@@ -164,15 +164,14 @@
                           <img class="rounded-circle article-img" alt="{{ comment.author }}" src="{{ comment.author.profile.image.url }}" />
                         </a>
                     <div class="media-body">
-                      
-                      <div class="article-metadata post-detail">
-                        
-                        <span class="h4">{{ comment.author.profile.displayname }}</span>
-                        <a class="h6" href="{{ comment.author.profile.get_absolute_url }}"><span>@</span>{{ comment.author }}</a>
-                        <!-- <span>@</span><a class="h6" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a> -->
-                        replying <a class="mr-2 h6" href="{{object.author.profile.get_absolute_url}}"><span>@</span>{{ object.author }}</a>
-                        <!-- <small class="text-muted">{{ comment.date_added|date:'m D, Y' }}</small>    -->
-
+                      <div class="article-metadata post-detail d-flex justify-content-between align-items-center">
+                        <div class="">
+                          <span class="h4">{{ comment.author.profile.displayname }}</span>
+                          <a class="h6" href="{{ comment.author.profile.get_absolute_url }}"><span>@</span>{{ comment.author }}</a><br class="d-block d-lg-none">
+                          <!-- <span>@</span><a class="h6" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a> -->
+                          replying <a class="mr-2 h6" href="{{object.author.profile.get_absolute_url}}"><span>@</span>{{ object.author }}</a>
+                          <!-- <small class="text-muted">{{ comment.date_added|date:'m D, Y' }}</small>    -->
+                        </div>
                         <div class="dropdown float-right position-relative mt-2">
                           <a href="#" class="dropdown-toggle h4 text-muted " data-toggle="dropdown"
                               aria-expanded="false">
@@ -293,7 +292,7 @@
                   <div class="form-group">
                     {{ comment_form }}
                   </div>
-                  <button class="btn btn-dark">Submit</button>
+                  <button class="btn btn-dark">Post</button>
                 </form>
               {% else %}
                 <p><a href="{% url 'login' %}">Log in</a> to add a comment!</p>
@@ -343,7 +342,7 @@
                                             <i class="fas fa-link share-icons"></i>
                                             <span class="ml-1">Copy Link</span>
                                         </a>
-                                        <a href="" class="mt-3 mt-md-0 mt-lg-0">
+                                        <a href="" class="">
                                             <i class="fas fa-share-alt share-icons mt-3 mt-md-0 mt-lg-0"></i>
                                             <span class="ml-1">Share via</span>
                                         </a>
@@ -377,11 +376,7 @@
                       <div class="modal-header">
                           <h5 class="modal-title text-center" id="modalLongTitle">
                               <!-- Share <span>@</span>{{comment.author}}'s Comment -->
-                              {% if comment.author == user %}
-                                Share <span>Your</span> Comment
-                              {% else %}
-                                  Share <span>@</span>{{comment.author}}'s Comment
-                              {% endif %}
+                              Users who liked
                           </h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
@@ -391,30 +386,13 @@
                           <div class="pt-3">
                                   <!-- <button type="button" class="" data-toggle="modal" data-target="#coursemodal"> -->
                                       <a href="">
-                                          <i class="fas fa-bookmark share-icons"></i>
-                                          <span class="ml-1">Bookmarks</span>
+                                          Tests
                                       </a>
-                                      <a href="" class="">
-                                          <i class="fas fa-link share-icons"></i>
-                                          <span class="ml-1">Copy Link</span>
-                                      </a>
-                                      <a href="" class="mt-3 mt-md-0 mt-lg-0">
-                                          <i class="fas fa-share-alt share-icons"></i>
-                                          <span class="ml-1">Share via</span>
-                                      </a>
+                                      
                                       
 
                                       
                                   <!-- </button> -->
-                          </div>
-                      </div>
-                      <div class="modal-body">
-                          <div class=" border-top border-sm pt-3">
-                              <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter share-icons"></i></a>
-                              <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook share-icons"></i></a>
-                              <!-- <a href="" target="_blank"><i class="fab fa-mail"></i></a> -->
-                              <a href="https://whatsapp.com/" target="_blank"><i class="fab fa-whatsapp share-icons"></i></a>
-                              <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram share-icons"></i></a>
                           </div>
                       </div>
                       
